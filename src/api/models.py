@@ -6,7 +6,8 @@ db = SQLAlchemy()
 #//////////////////// tabla de usuario
 
 class User(db.Model):
-   
+
+    __tablename__ = 'user'
     identity_number = db.Column(db.Integer, unique=True, nullable=False,primary_key=True)
     full_name = db.Column(db.String(120), unique=False, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
@@ -21,7 +22,7 @@ class User(db.Model):
     create_at = db.Column(db.String(10), unique=False, nullable=False)
 
     def __repr__(self):
-        return f'<User {self.email}>'
+        return f'<User {self.identity_number}>'
 
     def serialize(self):
         return {
@@ -38,12 +39,13 @@ class User(db.Model):
     
 #//////////////////// tabla de Appointment
     
-    class Appointment(db.Model):
-   
-     id_app = db.Column(db.Integer, unique=True, nullable=False, primary_key=True)
-     identity_number = db.Column(db.Integer, unique=True, nullable=False,primary_key=True)
-     doctor_id = db.Column(db.Integer, unique=True, nullable=False)
-     dated_at = db.Column(db.String(100), unique=False, nullable=False)
+class Appointment(db.Model):
+    
+    __tablename__ = 'appointment'
+    id_app = db.Column(db.Integer, unique=True, nullable=False, primary_key=True)
+    identity_number = db.Column(db.Integer, unique=True, nullable=False,primary_key=True)
+    doctor_id = db.Column(db.Integer, unique=True, nullable=False)
+    dated_at = db.Column(db.String(100), unique=False, nullable=False)
 
     def __repr__(self):
         return f'<Appointment {self.id_app}>'
@@ -56,18 +58,18 @@ class User(db.Model):
     
 #//////////////////// tabla de Role
 
-    class Role(db.Model):
-
-     role_id = db.Column(db.Integer, unique=True, nullable=False, primary_key=True)
-     name = db.Column(db.String(120), unique=False, nullable=False)
-     is_active = db.Column(db.Boolean(), unique=False, nullable=False)
+class Role(db.Model):
+    __tablename__ = 'role'
+    role_id = db.Column(db.Integer, unique=True, nullable=False, primary_key=True)
+    name = db.Column(db.String(120), unique=False, nullable=False)
+    is_active = db.Column(db.Boolean(), unique=False, nullable=False)
 
     def __repr__(self):
-        return f'<Role {self.id_app}>'
+        return f'<Role {self.role_id}>'
 
     def serialize_app(self):
         return {
-            "role_id": self.id_id,    
+            "role_id": self.role_id,    
             # do not serialize the password, its a security breach
         }
     
@@ -75,12 +77,12 @@ class User(db.Model):
 
 #//////////////////// tabla de Post
 
-    class Post(db.Model):
-
-     post_id = db.Column(db.Integer, unique=True, nullable=False, primary_key=True)
-     offers = db.Column(db.String(120), unique=False, nullable=False)
-     article = db.Column(db.String(120), unique=False, nullable=False)
-     doctor_id =  db.Column(db.Integer, unique=True, nullable=False)
+class Post(db.Model):
+    __tablename__ = 'post'
+    post_id = db.Column(db.Integer, unique=True, nullable=False, primary_key=True)
+    offers = db.Column(db.String(120), unique=False, nullable=False)
+    article = db.Column(db.String(120), unique=False, nullable=False)
+    doctor_id =  db.Column(db.Integer, unique=True, nullable=False)
 
 
     def __repr__(self):
@@ -94,18 +96,18 @@ class User(db.Model):
     
 #//////////////////// tabla de Prescription 
 
-    class Prescription (db.Model):
-
-     prescrip_id = db.Column(db.Integer, unique=True, nullable=False, primary_key=True)
-     identity_number = db.Column(db.Integer, unique=True, nullable=False)
-     left_eye_sph = db.Column(db.Integer, unique=True, nullable=False)
-     right_eye_sph = db.Column(db.Integer, unique=True, nullable=False)
-     left_eye_cyl = db.Column(db.Integer, unique=True, nullable=False)
-     right_eye_cyl = db.Column(db.Integer, unique=True, nullable=False)
-     left_eye_axis = db.Column(db.Integer, unique=True, nullable=False)
-     right_eye_axis = db.Column(db.Integer, unique=True, nullable=False)
-     notes = db.Column(db.String(120), unique=False, nullable=False)
-     dated_at = db.Column(db.String(100), unique=False, nullable=False)
+class Prescription (db.Model):
+    __tablename__ = 'prescription'
+    prescrip_id = db.Column(db.Integer, unique=True, nullable=False, primary_key=True)
+    identity_number = db.Column(db.Integer, unique=True, nullable=False)
+    left_eye_sph = db.Column(db.Integer, unique=True, nullable=False)
+    right_eye_sph = db.Column(db.Integer, unique=True, nullable=False)
+    left_eye_cyl = db.Column(db.Integer, unique=True, nullable=False)
+    right_eye_cyl = db.Column(db.Integer, unique=True, nullable=False)
+    left_eye_axis = db.Column(db.Integer, unique=True, nullable=False)
+    right_eye_axis = db.Column(db.Integer, unique=True, nullable=False)
+    notes = db.Column(db.String(120), unique=False, nullable=False)
+    dated_at = db.Column(db.String(100), unique=False, nullable=False)
 
 
     def __repr__(self):
@@ -120,20 +122,20 @@ class User(db.Model):
 
 #//////////////////// tabla de Order
 
-    class Order (db.Model):
-
-     order_id = db.Column(db.Integer, unique=True, nullable=False, primary_key=True)
-     identity_number = db.Column(db.Integer, unique=True, nullable=False)
-     prescrip_id = db.Column(db.Integer, unique=True, nullable=False)
-     status = db.Column(db.String(10), unique=False, nullable=False)
-     lens_type = db.Column(db.String(10), unique=False, nullable=False)
-     frame_type = db.Column(db.String(10), unique=False, nullable=False)
-     price = db.Column(db.Integer, unique=True, nullable=False)
-     dated_at = db.Column(db.String(100), unique=False, nullable=False)
+class Order (db.Model):
+    __tablename__ = 'order'
+    order_id = db.Column(db.Integer, unique=True, nullable=False, primary_key=True)
+    identity_number = db.Column(db.Integer, unique=True, nullable=False)
+    prescrip_id = db.Column(db.Integer, unique=True, nullable=False)
+    status = db.Column(db.String(10), unique=False, nullable=False)
+    lens_type = db.Column(db.String(10), unique=False, nullable=False)
+    frame_type = db.Column(db.String(10), unique=False, nullable=False)
+    price = db.Column(db.Integer, unique=True, nullable=False)
+    dated_at = db.Column(db.String(100), unique=False, nullable=False)
 
 
     def __repr__(self):
-        return f'<Role {self.porder_id}>'
+        return f'<Role {self.order_id}>'
 
     def serialize_app(self):
         return {
