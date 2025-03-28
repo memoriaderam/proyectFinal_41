@@ -1,0 +1,156 @@
+{
+	"info": {
+		"_postman_id": "b822bf3d-0390-4a12-8434-2927dd077915",
+		"name": "Gestión Oftalmológica API",
+		"description": "Colección de pruebas para los endpoints de pacientes, recetas, pedidos y estadísticas.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12122436"
+	},
+	"item": [
+		{
+			"name": "Crear Paciente",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"identity_number\": 12345678,\n    \"full_name\": \"Juan Perez\",\n    \"email\": \"juan@example.com\",\n    \"password\": \"test1234\",\n    \"gender\": \"Masculino\",\n    \"age\": 30,\n    \"address\": \"Av. Siempre Viva 123\",\n    \"phone\": \"987654321\",\n    \"speciality\": \"\",\n    \"is_active\": true,\n    \"role_id\": 3\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/patients",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"patients"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Editar Paciente",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"address\": \"Calle Falsa 456\",\n    \"phone\": \"912345678\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/patients/{{identity_number}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"patients",
+						"{{identity_number}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Crear Pedido",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"identity_number\": 12345678,\n    \"prescrip_id\": 1,\n    \"status\": \"pendiente\",\n    \"lens_type\": \"monofocal\",\n    \"frame_type\": \"metal\",\n    \"price\": 129.99,\n    \"dated_at\": \"2024-04-01T00:00:00Z\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/orders",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Crear Receta",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"identity_number\": 12345678,\n    \"left_eye_sph\": -1.5,\n    \"right_eye_sph\": -2.0,\n    \"left_eye_cyl\": -0.75,\n    \"right_eye_cyl\": -1.0,\n    \"left_eye_axis\": 90,\n    \"right_eye_axis\": 80,\n    \"notes\": \"Paciente con miop\\u00eda\",\n    \"dated_at\": \"2024-04-01T00:00:00Z\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/prescriptions",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"prescriptions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Ver Estadísticas Generales",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/stats/summary",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"stats",
+						"summary"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:3001",
+			"type": "default"
+		},
+		{
+			"key": "identity_number",
+			"value": "12345678",
+			"type": "default"
+		},
+		{
+			"key": "prescrip_id",
+			"value": "1",
+			"type": "default"
+		}
+	]
+}
