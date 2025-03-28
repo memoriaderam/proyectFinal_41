@@ -1,144 +1,128 @@
+
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
+from datetime import datetime, timezone
 
 db = SQLAlchemy()
 
-#//////////////////// tabla de usuario
+# Tabla de roles de usuario
+class Role(db.Model):
+    __tablename__ = 'role'
+    role_id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(120), nullable=False)
+    is_active = db.Column(db.Boolean, nullable=False, default=True)
+    users = db.relationship('User', backref='role', lazy=True)
 
+# Tabla de usuarios
 class User(db.Model):
-
     __tablename__ = 'user'
-    identity_number = db.Column(db.Integer, unique=True, nullable=False,primary_key=True)
-    full_name = db.Column(db.String(120), unique=False, nullable=False)
+    identity_number = db.Column(db.Integer, primary_key=True)
+    full_name = db.Column(db.String(120), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
-    gender = db.Column(db.String(80), unique=False, nullable=False)
-    age = db.Column(db.Integer, unique=False, nullable=False)
-    address = db.Column(db.String(200), unique=False, nullable=False)
-    phone = db.Column(db.Integer, unique=False, nullable=False)
-    speciality = db.Column(db.String(100), unique=False, nullable=False)
-    is_active = db.Column(db.Boolean(), unique=False, nullable=False)
-    role_id = db.Column(db.Integer, unique=True, nullable=False)
-    create_at = db.Column(db.String(10), unique=False, nullable=False)
+    gender = db.Column(db.String(80), nullable=False)
+    age = db.Column(db.Integer, nullable=False)
+    address = db.Column(db.String(200), nullable=False)
+    phone = db.Column(db.String(20), nullable=False)
+    speciality = db.Column(db.String(100), nullable=True)
+    is_active = db.Column(db.Boolean, nullable=False, default=True)
+    role_id = db.Column(db.Integer, db.ForeignKey('role.role_id', name='fk_user_role'), nullable=False)
+    create_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
+
+    appointments = db.relationship('Appointment', backref='patient', foreign_keys='Appointment.identity_number', lazy=True)
+    prescriptions = db.relationship('Prescription', backref='patient', lazy=True)
+    orders = db.relationship('Order', backref='patient', lazy=True)
+    posts = db.relationship('Post', backref='doctor', foreign_keys='Post.doctor_id', lazy=True)
 
     def __repr__(self):
         return f'<User {self.identity_number}>'
 
-    def serialize(self):
-        return {
-            "id": self.identity_number,
-            "email": self.email,
-            # do not serialize the password, its a security breach
-        }
-    
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
-    
-#//////////////////// tabla de Appointment
-    
+
+# Tabla de citas médicas
 class Appointment(db.Model):
-    
     __tablename__ = 'appointment'
-    id_app = db.Column(db.Integer, unique=True, nullable=False, primary_key=True)
-    identity_number = db.Column(db.Integer, unique=True, nullable=False,primary_key=True)
-    doctor_id = db.Column(db.Integer, unique=True, nullable=False)
-    dated_at = db.Column(db.String(100), unique=False, nullable=False)
+    id_app = db.Column(db.Integer, primary_key=True)
+    identity_number = db.Column(db.Integer, db.ForeignKey('user.identity_number', name='fk_appointment_patient'), nullable=False)
+    doctor_id = db.Column(db.Integer, db.ForeignKey('user.identity_number', name='fk_appointment_doctor'), nullable=False)
+    dated_at = db.Column(db.DateTime, nullable=False)
 
     def __repr__(self):
         return f'<Appointment {self.id_app}>'
 
-    def serialize_app(self):
-        return {
-            "id_app": self.id_app,    
-            # do not serialize the password, its a security breach
-        }
-    
-#//////////////////// tabla de Role
-
-class Role(db.Model):
-    __tablename__ = 'role'
-    role_id = db.Column(db.Integer, unique=True, nullable=False, primary_key=True)
-    name = db.Column(db.String(120), unique=False, nullable=False)
-    is_active = db.Column(db.Boolean(), unique=False, nullable=False)
-
-    def __repr__(self):
-        return f'<Role {self.role_id}>'
-
-    def serialize_app(self):
-        return {
-            "role_id": self.role_id,    
-            # do not serialize the password, its a security breach
-        }
-    
-
-
-#//////////////////// tabla de Post
-
+# Publicaciones u ofertas hechas por doctores
 class Post(db.Model):
     __tablename__ = 'post'
-    post_id = db.Column(db.Integer, unique=True, nullable=False, primary_key=True)
-    offers = db.Column(db.String(120), unique=False, nullable=False)
-    article = db.Column(db.String(120), unique=False, nullable=False)
-    doctor_id =  db.Column(db.Integer, unique=True, nullable=False)
-
+    post_id = db.Column(db.Integer, primary_key=True)
+    offers = db.Column(db.String(120), nullable=False)
+    article = db.Column(db.String(120), nullable=False)
+    doctor_id = db.Column(db.Integer, db.ForeignKey('user.identity_number', name='fk_post_doctor'), nullable=False)
 
     def __repr__(self):
-        return f'<Role {self.post_id}>'
+        return f'<Post {self.post_id}>'
 
-    def serialize_app(self):
-        return {
-            "role_id": self.post_id,    
-            # do not serialize the password, its a security breach
-        }
-    
-#//////////////////// tabla de Prescription 
-
-class Prescription (db.Model):
+# Recetas ópticas emitidas a pacientes
+class Prescription(db.Model):
     __tablename__ = 'prescription'
-    prescrip_id = db.Column(db.Integer, unique=True, nullable=False, primary_key=True)
-    identity_number = db.Column(db.Integer, unique=True, nullable=False)
-    left_eye_sph = db.Column(db.Integer, unique=True, nullable=False)
-    right_eye_sph = db.Column(db.Integer, unique=True, nullable=False)
-    left_eye_cyl = db.Column(db.Integer, unique=True, nullable=False)
-    right_eye_cyl = db.Column(db.Integer, unique=True, nullable=False)
-    left_eye_axis = db.Column(db.Integer, unique=True, nullable=False)
-    right_eye_axis = db.Column(db.Integer, unique=True, nullable=False)
-    notes = db.Column(db.String(120), unique=False, nullable=False)
-    dated_at = db.Column(db.String(100), unique=False, nullable=False)
-
+    prescrip_id = db.Column(db.Integer, primary_key=True)
+    identity_number = db.Column(db.Integer, db.ForeignKey('user.identity_number', name='fk_prescription_patient'), nullable=False)
+    left_eye_sph = db.Column(db.Float, nullable=False)
+    right_eye_sph = db.Column(db.Float, nullable=False)
+    left_eye_cyl = db.Column(db.Float, nullable=False)
+    right_eye_cyl = db.Column(db.Float, nullable=False)
+    left_eye_axis = db.Column(db.Integer, nullable=False)
+    right_eye_axis = db.Column(db.Integer, nullable=False)
+    notes = db.Column(db.String(255), nullable=True)
+    dated_at = db.Column(db.DateTime, nullable=False)
+    orders = db.relationship('Order', backref='prescription', lazy=True)
 
     def __repr__(self):
-        return f'<Role {self.prescrip_id}>'
+        return f'<Prescription {self.prescrip_id}>'
 
-    def serialize_app(self):
-        return {
-            "role_id": self.prescrip_id,    
-            # do not serialize the password, its a security breach
-        }
-    
-
-#//////////////////// tabla de Order
-
-class Order (db.Model):
+# Pedidos de lentes ópticos
+class Order(db.Model):
     __tablename__ = 'order'
-    order_id = db.Column(db.Integer, unique=True, nullable=False, primary_key=True)
-    identity_number = db.Column(db.Integer, unique=True, nullable=False)
-    prescrip_id = db.Column(db.Integer, unique=True, nullable=False)
-    status = db.Column(db.String(10), unique=False, nullable=False)
-    lens_type = db.Column(db.String(10), unique=False, nullable=False)
-    frame_type = db.Column(db.String(10), unique=False, nullable=False)
-    price = db.Column(db.Integer, unique=True, nullable=False)
-    dated_at = db.Column(db.String(100), unique=False, nullable=False)
-
+    order_id = db.Column(db.Integer, primary_key=True)
+    identity_number = db.Column(db.Integer, db.ForeignKey('user.identity_number', name='fk_order_patient'), nullable=False)
+    prescrip_id = db.Column(db.Integer, db.ForeignKey('prescription.prescrip_id', name='fk_order_prescription'), nullable=False)
+    status = db.Column(db.String(20), nullable=False)
+    lens_type = db.Column(db.String(50), nullable=False)
+    frame_type = db.Column(db.String(50), nullable=False)
+    price = db.Column(db.Float, nullable=False)
+    dated_at = db.Column(db.DateTime, nullable=False)
 
     def __repr__(self):
-        return f'<Role {self.order_id}>'
+        return f'<Order {self.order_id}>'
 
-    def serialize_app(self):
-        return {
-            "role_id": self.order_id,    
-            # do not serialize the password, its a security breach
-        }
+################# modelos extras ######################
+class Notification(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    message = db.Column(db.String(255), nullable=False)
+    is_read = db.Column(db.Boolean, default=False)
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
+
+    def __repr__(self):
+        return f"<Notification {self.id}: {'leída' if self.is_read else 'nueva'}>"
+
+class Comment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.identity_number', name='fk_comment_user'), nullable=False)
+    content = db.Column(db.Text, nullable=False)
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
+
+    def __repr__(self):
+        return f"<Comment {self.id} by User {self.user_id}>"
+
+class FileAttachment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    filename = db.Column(db.String(255), nullable=False)
+    url = db.Column(db.String(500), nullable=False)
+    uploaded_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.identity_number', name='fk_file_user'), nullable=False)
+
+    def __repr__(self):
+        return f"<File {self.filename} for User {self.user_id}>"
