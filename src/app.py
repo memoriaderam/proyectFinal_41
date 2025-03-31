@@ -10,6 +10,7 @@ from api.models import db
 from api.routes import api
 from api.admin import setup_admin
 from api.commands import setup_commands
+from api.models import Post
 
 # from models import Person
 
@@ -70,3 +71,62 @@ def serve_any_other_file(path):
 if __name__ == '__main__':
     PORT = int(os.environ.get('PORT', 3001))
     app.run(host='0.0.0.0', port=PORT, debug=True)
+
+
+# ////Como administrador, quiero agregar nuevos productos al catálogo para mantener la oferta actualizada
+
+
+@app.router('/agregar/catalogos',methods=['POST'])
+def productos_catalogos():
+    post = Post
+    post.post_id = request.json.get('post_id')
+    post.offers = request.json.get('offers')
+    post.article = request.json.get('article')
+    post.doctor_id = request.json.get('doctor_id')
+
+
+
+#////Como administrador, quiero poder editar los productos existentes en el catálogo para actualizar su información
+@app.route('/post/<int:post_id>', methods=['PUT'])
+def update_post(post_id):
+    post = Post.query.get(post_id)
+    
+    if not post:
+        return jsonify({"error": "Post no encontrado"}), 404
+
+    data = request.get_json()
+
+    # Actualiza solo si existe el campo
+    post.offers = data.get('offers', post.offers)
+    post.article = data.get('article', post.article)
+    post.doctor_id = data.get('doctor_id', post.doctor_id)
+
+    db.session.commit()
+
+    return jsonify({
+        "message": "Post actualizado",
+        "post": {
+            "post_id": post.post_id,
+            "offers": post.offers,
+            "article": post.article,
+            "doctor_id": post.doctor_id
+        }
+    }), 200
+
+
+#////Como administrador, quiero eliminar productos del catálogo para remover los que ya no estén disponibles
+@app.route('/post_delete/<int:evo_id>', methods=[ "DELETE"])
+def delete_post(evo_id):
+    if request.method == 'DELETE':
+        post = Post.query.get(evo_id)
+        if post is None:
+            return jsonify({
+                'mensaje': 'Post no encontrado'
+            }), 404
+        else:
+            db.session.delete(post)
+            db.session.commit()
+
+            return jsonify({
+                "mensaje":"Post eliminado"
+            }), 200
