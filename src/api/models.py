@@ -26,7 +26,7 @@ class User(db.Model):
     phone = db.Column(db.String(20), nullable=False)
     speciality = db.Column(db.String(100), nullable=True)
     is_active = db.Column(db.Boolean, nullable=False, default=True)
-    role_id = db.Column(db.Integer, db.ForeignKey('role.role_id', name='fk_user_role'), nullable=False)
+    role_id = db.Column(db.Integer, db.ForeignKey('role.id', name='fk_user_role'), nullable=False)
     create_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
 
     appointments = db.relationship('Appointment', backref='patient', foreign_keys='Appointment.identity_number', lazy=True)
@@ -47,8 +47,8 @@ class User(db.Model):
 class Appointment(db.Model):
     __tablename__ = 'appointment'
     id = db.Column(db.Integer, primary_key=True)
-    identity_number = db.Column(db.Integer, db.ForeignKey('user.identity_number', name='fk_appointment_patient'), nullable=False)
-    doctor_id = db.Column(db.Integer, db.ForeignKey('user.identity_number', name='fk_appointment_doctor'), nullable=False)
+    identity_number = db.Column(db.Integer, db.ForeignKey('user.dni', name='fk_appointment_patient'), nullable=False)
+    doctor_id = db.Column(db.Integer, db.ForeignKey('user.dni', name='fk_appointment_doctor'), nullable=False)
     create_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
     update_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc),onupdate=lambda: datetime.now(timezone.utc))
 
@@ -61,7 +61,7 @@ class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     offers = db.Column(db.String(120), nullable=False)
     article = db.Column(db.String(120), nullable=False)
-    doctor_id = db.Column(db.Integer, db.ForeignKey('user.identity_number', name='fk_post_doctor'), nullable=False)
+    doctor_id = db.Column(db.Integer, db.ForeignKey('user.dni', name='fk_post_doctor'), nullable=False)
 
     def __repr__(self):
         return f'<Post {self.post_id}>'
@@ -70,7 +70,7 @@ class Post(db.Model):
 class Prescription(db.Model):
     __tablename__ = 'prescription'
     id = db.Column(db.Integer, primary_key=True)
-    identity_number = db.Column(db.Integer, db.ForeignKey('user.identity_number', name='fk_prescription_patient'), nullable=False)
+    identity_number = db.Column(db.Integer, db.ForeignKey('user.dni', name='fk_prescription_patient'), nullable=False)
     left_eye_sph = db.Column(db.Float, nullable=False)
     right_eye_sph = db.Column(db.Float, nullable=False)
     left_eye_cyl = db.Column(db.Float, nullable=False)
@@ -88,8 +88,8 @@ class Prescription(db.Model):
 class Order(db.Model):
     __tablename__ = 'order'
     order_id = db.Column(db.Integer, primary_key=True)
-    identity_number = db.Column(db.Integer, db.ForeignKey('user.identity_number', name='fk_order_patient'), nullable=False)
-    prescription_id = db.Column(db.Integer, db.ForeignKey('prescription.prescrip_id', name='fk_order_prescription'), nullable=False)
+    identity_number = db.Column(db.Integer, db.ForeignKey('user.dni', name='fk_order_patient'), nullable=False)
+    prescription_id = db.Column(db.Integer, db.ForeignKey('prescription.id', name='fk_order_prescription'), nullable=False)
     status = db.Column(db.String(20), nullable=False)
     lens_type = db.Column(db.String(50), nullable=False)
     frame_type = db.Column(db.String(50), nullable=False)
