@@ -35,7 +35,7 @@ class User(db.Model):
     posts = db.relationship('Post', backref='doctor', foreign_keys='Post.doctor_id', lazy=True)
 
     def __repr__(self):
-        return f'<User {self.identity_number}>'
+        return f'<User {self.dni}>'
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -61,10 +61,18 @@ class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     offers = db.Column(db.String(120), nullable=False)
     article = db.Column(db.String(120), nullable=False)
-    doctor_id = db.Column(db.Integer, db.ForeignKey('user.dni', name='fk_post_doctor'), nullable=False)
+    doctor_id = db.Column(db.Integer, db.ForeignKey('user.id', name='fk_post_doctor'), nullable=False)
 
     def __repr__(self):
         return f'<Post {self.post_id}>'
+    
+    def serialize(self):
+        return {
+            "id": self.id,
+            "offers": self.offers,
+            "article": self.article,
+            "doctor_id": self.doctor_id
+        }
 
 # Recetas ópticas emitidas a pacientes
 class Prescription(db.Model):
@@ -111,7 +119,7 @@ class Notification(db.Model):
 
 class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.identity_number', name='fk_comment_user'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.dni', name='fk_comment_user'), nullable=False)
     content = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
 
@@ -123,7 +131,7 @@ class FileAttachment(db.Model):
     filename = db.Column(db.String(255), nullable=False)
     url = db.Column(db.String(500), nullable=False)
     uploaded_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
-    user_id = db.Column(db.Integer, db.ForeignKey('user.identity_number', name='fk_file_user'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.dni', name='fk_file_user'), nullable=False)
 
     def __repr__(self):
         return f"<File {self.filename} for User {self.user_id}>"
