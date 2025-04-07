@@ -1,5 +1,55 @@
 /*
+    home./*
     home.css: This website contains selectors only used in home.css
+
+    All pages share the styles on index.css but you should create 
+    one more css for each page that will contain the selected used 
+    on that page only (the ones not reused in other pages).
+*/
+
+
+.nav {
+
+    background-color: aliceblue;
+    color:black;
+}
+/*
+.border {
+
+     border: 5px solid black;
+     border-style: 5px solid blue;
+}
+*/
+
+.button {
+     border: 1px solid blue;
+}
+     
+
+.date {
+
+     margin-left: 2%;
+     text-align: left;
+     width: 600px;
+     height: 200px;
+
+}
+
+.left {
+     text-align: left;
+     align-content: left;
+}
+
+.justify
+{
+     text-align: justify;
+}
+
+.center
+{
+     text-align: center;
+}
+css: This website contains selectors only used in home.css
 
     All pages share the styles on index.css but you should create 
     one more css for each page that will contain the selected used 
