@@ -10,8 +10,17 @@ import { Navbar } from "./component/navbar";
 import { Footer } from "./component/footer";
 
 import Dashboard from "./pages/Dashboard.jsx";
-import PatientsPage from "./pages/PatientsPage.jsx";
-import OrdersPage from "./pages/OrdersPage.jsx";
+//patients imports
+import { PatientsPage } from './pages/Patients/PatientsPage.jsx';
+import { CreatePatient } from "./pages/Patients/CreatePatient.jsx";
+import { EditPatient } from "./pages/Patients/EditPatient.jsx";
+import { ViewPatient } from "./pages/Patients/ViewPatient.jsx";
+//orders imports
+import { OrdersPage } from "./pages/Orders/OrdersPage.jsx";
+import { CreateOrder } from "./pages/Orders/CreateOrder.jsx";
+import { EditOrder } from "./pages/Orders/EditOrder.jsx";
+import { ViewOrder } from "./pages/Orders/ViewOrder.jsx";
+
 import AppointmentsPage from "./pages/AppointmentsPage.jsx";
 import PrescriptionsPage from "./pages/PrescriptionsPage.jsx";
 import DoctorsPage from "./pages/DoctorsPage.jsx";
@@ -37,8 +46,19 @@ const Layout = () => {
                     <ToastContainer position="top-right" autoClose={3000} />
                     <Routes>
                         <Route path="/" element={<Dashboard />} />
+
                         <Route path="/patients" element={<PatientsPage />} />
+                        <Route path="/patients" element={<PatientsPage />} />
+                        <Route path="/patients/new" element={<CreatePatient />} />
+                        <Route path="/patients/:id/update" element={<EditPatient />} />
+                        <Route path="/patients/:id" element={<ViewPatient />} />
+
                         <Route path="/orders" element={<OrdersPage />} />
+                        <Route path="/orders/new" element={<CreateOrder />} />
+                        <Route path="/orders/:id/edit" element={<EditOrder />} />
+                        <Route path="/orders/:id" element={<ViewOrder />} />
+
+
                         <Route path="/appointments" element={<AppointmentsPage />} />
                         <Route path="/prescriptions" element={<PrescriptionsPage />} />
                         <Route path="/doctors" element={<DoctorsPage />} />

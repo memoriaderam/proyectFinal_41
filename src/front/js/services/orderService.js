@@ -1,24 +1,47 @@
 import { API_URL } from "./api";
 
 export const getOrders = async () => {
-    const res = await fetch(`${API_URL}/orders`);
-    return res.json();
+    try {
+        const res = await fetch(`${API_URL}/orders`);
+        if (!res.ok) throw await res.json();
+        return await res.json();
+    } catch (error) {
+        throw new Error(error.message || "Error al obtener pedidos");
+    }
+};
+
+export const getOrderById = async (id) => {
+    try {
+        const res = await fetch(`${API_URL}/orders/${id}`);
+        if (!res.ok) throw await res.json();
+        return await res.json();
+    } catch (error) {
+        throw new Error(error.message || "Pedido no encontrado");
+    }
 };
 
 export const createOrder = async (data) => {
-    const res = await fetch(`${API_URL}/orders`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-    });
-    return res.json();
+    try {
+        const res = await fetch(`${API_URL}/orders`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data),
+        });
+        return res;
+    } catch (error) {
+        throw new Error("Error de red al crear pedido");
+    }
 };
 
 export const updateOrder = async (id, data) => {
-    const res = await fetch(`${API_URL}/orders/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-    });
-    return res.json();
+    try {
+        const res = await fetch(`${API_URL}/orders/${id}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data),
+        });
+        return res;
+    } catch (error) {
+        throw new Error("Error de red al actualizar pedido");
+    }
 };
