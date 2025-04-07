@@ -5,7 +5,7 @@ from api.routes import api  # este es tu Blueprint
 
 
 @api.route('/add/user',methods=['POST'])
-def crear_user():
+def create_user():
     if not request.is_json:
         return jsonify({"error": "El contenido debe ser application/json"}), 400
     print(">>> Llegó al endpoint /add/post")
@@ -29,6 +29,21 @@ def crear_user():
     db.session.add(user)
     db.session.commit()
     return jsonify({'message':'User creado correctamente'})
+
+# Probar usuarios
+# {
+#   "dni": 1105234567,
+#   "full_name": "Dra. Sofía Pérez",
+#   "email": "sofia@example.com",
+#   "password": "123456",
+#   "gender": "female",
+#   "age": 32,
+#   "address": "Av. Quito 123",
+#   "phone": "0999999999",
+#   "speciality": "Optometría",
+#   "role_id": 1
+# }
+
 
 
 

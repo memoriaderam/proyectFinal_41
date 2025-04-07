@@ -5,6 +5,7 @@ import os
 from flask import Flask, request, jsonify, url_for, send_from_directory
 from flask_migrate import Migrate
 from flask_swagger import swagger
+from flask_jwt_extended import JWTManager
 from flask import Blueprint
 from api.utils import APIException, generate_sitemap
 from api.models import db
@@ -19,6 +20,8 @@ ENV = "development" if os.getenv("FLASK_DEBUG") == "1" else "production"
 static_file_dir = os.path.join(os.path.dirname(
     os.path.realpath(__file__)), '../public/')
 app = Flask(__name__)
+jwt = JWTManager(app)
+app.config['JWT_SECRET_KEY']= 'secret-key85'
 app.url_map.strict_slashes = False
 
 # database condiguration
