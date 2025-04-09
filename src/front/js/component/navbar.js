@@ -22,20 +22,24 @@ export const Navbar = () => {
 				<div className="collapse navbar-collapse" id="navbarNav">
 					<ul className="navbar-nav me-auto mb-2 mb-lg-0">
 						<li className="nav-item">
+							<Link className="nav-link" to="/doctors">Doctores</Link>
+						</li>
+						<li className="nav-item">
 							<Link className="nav-link" to="/patients">Pacientes</Link>
-						</li>
-						<li className="nav-item">
-							<Link className="nav-link" to="/orders">Pedidos</Link>
-						</li>
-						<li className="nav-item">
-							<Link className="nav-link" to="/appointments">Citas</Link>
 						</li>
 						<li className="nav-item">
 							<Link className="nav-link" to="/prescriptions">Recetas</Link>
 						</li>
 						<li className="nav-item">
-							<Link className="nav-link" to="/doctors">Doctores</Link>
+							<Link className="nav-link" to="/orders">Pedidos</Link>
 						</li>
+						{/* 
+						<li className="nav-item">
+							<Link className="nav-link" to="/appointments">Citas</Link>
+						</li>
+						*/}
+
+
 						<li className="nav-item">
 							<Link className="nav-link" to="/notifications">Notificaciones</Link>
 						</li>

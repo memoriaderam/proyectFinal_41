@@ -5,6 +5,13 @@ export const getPrescriptions = async () => {
     return res.json();
 };
 
+export const getPrescriptionById = async (id) => {
+    const res = await fetch(`${API_URL}/prescriptions/${id}`);
+    if (!res.ok) throw new Error("No se pudo cargar la receta");
+    return res.json();
+};
+
+
 export const createPrescription = async (data) => {
     const res = await fetch(`${API_URL}/prescriptions`, {
         method: "POST",
