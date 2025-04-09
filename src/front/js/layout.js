@@ -20,9 +20,14 @@ import { OrdersPage } from "./pages/Orders/OrdersPage.jsx";
 import { CreateOrder } from "./pages/Orders/CreateOrder.jsx";
 import { EditOrder } from "./pages/Orders/EditOrder.jsx";
 import { ViewOrder } from "./pages/Orders/ViewOrder.jsx";
+//prescription imports
+import { PrescriptionsPage } from "./pages/Prescriptions/PrescriptionsPage.jsx";
+import { CreatePrescription } from "./pages/Prescriptions/CreatePrescription.jsx";
+import { EditPrescription } from "./pages/Prescriptions/EditPrescription.jsx";
+import { ViewPrescription } from "./pages/Prescriptions/ViewPrescription.jsx";
+
 
 import AppointmentsPage from "./pages/AppointmentsPage.jsx";
-import PrescriptionsPage from "./pages/PrescriptionsPage.jsx";
 import DoctorsPage from "./pages/DoctorsPage.jsx";
 import NotificationsPage from "./pages/NotificationsPage.jsx";
 import CommentsPage from "./pages/CommentsPage.jsx";
@@ -48,7 +53,6 @@ const Layout = () => {
                         <Route path="/" element={<Dashboard />} />
 
                         <Route path="/patients" element={<PatientsPage />} />
-                        <Route path="/patients" element={<PatientsPage />} />
                         <Route path="/patients/new" element={<CreatePatient />} />
                         <Route path="/patients/:id/update" element={<EditPatient />} />
                         <Route path="/patients/:id" element={<ViewPatient />} />
@@ -59,8 +63,12 @@ const Layout = () => {
                         <Route path="/orders/:id" element={<ViewOrder />} />
 
 
-                        <Route path="/appointments" element={<AppointmentsPage />} />
                         <Route path="/prescriptions" element={<PrescriptionsPage />} />
+                        <Route path="/prescriptions/new" element={<CreatePrescription />} />
+                        <Route path="/prescriptions/:id/edit" element={<EditPrescription />} />
+                        <Route path="/prescriptions/:id" element={<ViewPrescription />} />
+
+
                         <Route path="/doctors" element={<DoctorsPage />} />
                         <Route path="/notifications" element={<NotificationsPage />} />
                         <Route path="/comments" element={<CommentsPage />} />

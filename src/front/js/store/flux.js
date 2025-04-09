@@ -103,8 +103,19 @@ const getState = ({ getStore, getActions, setStore }) => ({
 			setStore({ prescriptions: data });
 		},
 		createPrescription: async (rx) => {
-			await createPrescription(rx);
-			getActions().loadPrescriptions();
+			try {
+				const res = await createPrescription(rx);
+				if (!res.ok) {
+					const errorData = await res.json().catch(() => ({}));
+					const message = errorData.message || "Error al crear receta";
+					throw new Error(message);
+				}
+				await getActions().loadPrescriptions();
+				return true;
+			} catch (err) {
+				console.error("[createPrescription error]", err);
+				throw err;
+			}
 		},
 		deletePrescription: async (id) => {
 			await fetch(`${API_URL}/prescriptions/${id}`, { method: "DELETE" });
