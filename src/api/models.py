@@ -61,6 +61,7 @@ class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     offers = db.Column(db.String(120), nullable=False)
     article = db.Column(db.String(120), nullable=False)
+    image_url = db.Column(db.String(255),nullable=True)
     doctor_id = db.Column(db.Integer, db.ForeignKey('user.id', name='fk_post_doctor'), nullable=False)
 
     def __repr__(self):
@@ -71,6 +72,7 @@ class Post(db.Model):
             "id": self.id,
             "offers": self.offers,
             "article": self.article,
+            "image_url": self.image_url,
             "doctor_id": self.doctor_id
         }
 
@@ -112,7 +114,7 @@ class Notification(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     message = db.Column(db.String(255), nullable=False)
     is_read = db.Column(db.Boolean, default=False)
-    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc)) 
 
     def __repr__(self):
         return f"<Notification {self.id}: {'leída' if self.is_read else 'nueva'}>"
