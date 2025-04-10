@@ -29,3 +29,7 @@ export const updatePrescription = async (id, data) => {
     });
     return res.json();
 };
+
+export const downloadPrescriptionPDF = (id) => {
+    window.open(`${API_URL}/prescriptions/${id}/download`, "_blank");
+};

@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
-import { getPrescriptionById } from "../../services/prescriptionService";
+import { getPrescriptionById, downloadPrescriptionPDF } from "../../services/prescriptionService";
 import {
     Card, Row, Col, Button, Badge
 } from "react-bootstrap";
 import {
     FaEye, FaUser, FaCalendarAlt, FaCircle, FaDotCircle,
-    FaArrowsAltH, FaStickyNote, FaPrint, FaEnvelope
+    FaArrowsAltH, FaStickyNote, FaPrint
 } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { useReactToPrint } from "react-to-print";
@@ -16,7 +16,7 @@ export const ViewPrescription = () => {
     const { id } = useParams();
     const { store, actions } = useContext(Context);
     const [prescription, setPrescription] = useState(null);
-    const componentRef = useRef();
+    const componentRef = useRef(null); // ✅ useRef correcto
 
     useEffect(() => {
         actions.loadPatients();
@@ -25,16 +25,19 @@ export const ViewPrescription = () => {
             .catch(() => toast.error("Receta no encontrada"));
     }, [id]);
 
-    const handlePrint = useReactToPrint({
-        content: () => componentRef.current
-    });
-
     const isSevereMyopia = (sph) => parseFloat(sph) <= -4;
 
     const getPatientName = () => {
-        const patient = store.patients.find(p => p.identity_number == prescription?.identity_number);
+        const patient = store.patients.find(p => p.identity_number === prescription?.identity_number);
         return patient ? patient.full_name : null;
     };
+
+    const handlePrint = useReactToPrint({
+        contentRef: componentRef, // ✅ uso correcto para react-to-print@3.0.0
+        documentTitle: `receta_${prescription?.prescrip_id || "sin_id"}`,
+        onAfterPrint: () => toast.success("Impresión completa"),
+        onPrintError: () => toast.error("Error al imprimir")
+    });
 
     if (!prescription) return <p className="mt-4">Cargando receta...</p>;
 
@@ -43,10 +46,16 @@ export const ViewPrescription = () => {
             <h2><FaEye className="me-2" />Detalle de Receta</h2>
 
             <div className="d-flex justify-content-end my-3">
-                <Button variant="secondary" onClick={handlePrint} className="me-2"><FaPrint /> Imprimir</Button>
-                <Button variant="info"><FaEnvelope /> Enviar por correo</Button>
+                <Button variant="info" onClick={handlePrint} className="me-2">
+                    <FaPrint /> Imprimir
+                </Button>
+
+                <Button variant="secondary" onClick={() => downloadPrescriptionPDF(prescription.prescrip_id)}>
+                    📄 Descargar PDF
+                </Button>
             </div>
 
+            {/* ✅ ref debe estar en un nodo HTML real */}
             <div ref={componentRef}>
                 <Card className="shadow-sm">
                     <Card.Body>
@@ -57,7 +66,10 @@ export const ViewPrescription = () => {
                                 <strong>Paciente:</strong> {prescription.identity_number}
                                 {getPatientName() && ` - ${getPatientName()}`}
                             </Col>
-                            <Col md={4}><FaCalendarAlt className="me-2" /><strong>Fecha:</strong> {prescription.dated_at?.split("T")[0]}</Col>
+                            <Col md={4}>
+                                <FaCalendarAlt className="me-2" />
+                                <strong>Fecha:</strong> {prescription.dated_at?.split("T")[0]}
+                            </Col>
                         </Row>
 
                         <hr />
