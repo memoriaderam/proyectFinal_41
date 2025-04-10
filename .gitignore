@@ -80,3 +80,9 @@ database.database
 database.db
 diagram.png
 __pycache__/
+
+# Ignorar carpeta de migraciones
+migrations/
+
+# Ignorar carpeta instance
+instance/

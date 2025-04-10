@@ -31,8 +31,8 @@ export const OrdersPage = () => {
             <hr />
             <OrderTable
                 orders={orders}
-                onView={(o) => navigate(`/orders/${o.id}`)}
-                onEdit={(o) => navigate(`/orders/${o.id}/edit`)}
+                onView={(order) => navigate(`/orders/${order.order_id}`)}
+                onEdit={(order) => navigate(`/orders/${order.order_id}/edit`)}
             />
         </div>
     );

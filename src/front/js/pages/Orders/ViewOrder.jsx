@@ -1,34 +1,61 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { getOrderById } from "../../services/orderService";
-import { OrderStatusBadge } from "../../component/Orders/OrderStatusBadge";
+import { Card, Row, Col } from "react-bootstrap";
+import { FaIdBadge, FaUser, FaPrescriptionBottle, FaGlasses, FaDollarSign, FaCalendar, FaTags } from "react-icons/fa";
 import { toast } from "react-toastify";
+import { OrderStatusBadge } from "../../component/Orders/OrderStatusBadge";
+import { Context } from "../../store/appContext";
 
 export const ViewOrder = () => {
     const { id } = useParams();
+    const { store, actions } = useContext(Context);
     const [order, setOrder] = useState(null);
 
     useEffect(() => {
-        getOrderById(id).then(setOrder).catch(() => toast.error("Pedido no encontrado"));
+        getOrderById(id)
+            .then(setOrder)
+            .catch(() => toast.error("Pedido no encontrado"));
     }, [id]);
+
+    const formatPrice = (price) => new Intl.NumberFormat("es-CL", {
+        style: "currency",
+        currency: "CLP"
+    }).format(price);
+
+    const formatDate = (dateStr) => {
+        if (!dateStr) return "No disponible";
+        const date = new Date(dateStr);
+        return isNaN(date) ? "Fecha inválida" : date.toLocaleDateString("es-CL");
+    };
+
+    if (!order) return <p className="mt-4">Cargando pedido...</p>;
 
     return (
         <div className="container mt-4">
-            <h2>Detalle del Pedido</h2>
-            {order ? (
-                <div>
-                    <p><strong>ID:</strong> {order.id}</p>
-                    <p><strong>RUT Paciente:</strong> {order.identity_number}</p>
-                    <p><strong>ID Receta:</strong> {order.prescrip_id}</p>
-                    <p><strong>Tipo de lente:</strong> {order.lens_type}</p>
-                    <p><strong>Tipo de marco:</strong> {order.frame_type}</p>
-                    <p><strong>Precio:</strong> ${order.price}</p>
-                    <p><strong>Fecha:</strong> {order.dated_at}</p>
-                    <p><strong>Estado:</strong> <OrderStatusBadge status={order.status} /></p>
-                </div>
-            ) : (
-                <p>Cargando datos...</p>
-            )}
+            <h2><FaIdBadge className="me-2" />Detalle del Pedido</h2>
+            <Card className="shadow-sm mt-3">
+                <Card.Body>
+                    <Row className="mb-2">
+                        <Col md={6}><FaUser className="me-2" /><strong>RUT Paciente:</strong> {order.identity_number}</Col>
+                        <Col md={6}><FaPrescriptionBottle className="me-2" /><strong>ID Receta:</strong> {order.prescrip_id}</Col>
+                    </Row>
+
+                    <Row className="mb-2">
+                        <Col md={6}><FaGlasses className="me-2" /><strong>Tipo de lente:</strong> {order.lens_type}</Col>
+                        <Col md={6}><FaGlasses className="me-2" /><strong>Tipo de marco:</strong> {order.frame_type}</Col>
+                    </Row>
+
+                    <Row className="mb-2">
+                        <Col md={6}><FaDollarSign className="me-2" /><strong>Precio:</strong> {formatPrice(order.price)}</Col>
+                        <Col md={6}><FaCalendar className="me-2" /><strong>Fecha:</strong> {formatDate(order.dated_at)}</Col>
+                    </Row>
+
+                    <Row className="mb-2">
+                        <Col md={12}><FaTags className="me-2" /><strong>Estado:</strong> <OrderStatusBadge status={order.status} /></Col>
+                    </Row>
+                </Card.Body>
+            </Card>
         </div>
     );
 };
