@@ -4,12 +4,24 @@ import ScrollToTop from "./component/scrollToTop";
 import { BackendURL } from "./component/backendURL";
 
 import { Home } from "./pages/home";
-import { Demo } from "./pages/demo";
+import { About} from "./pages/aboutUs";
+import { Brands} from "./pages/brands";
+import {Users} from "./pages/usersacces";
+import {Admin} from "./pages/usersadmin";
+import {Sales} from "./pages/sales";
 import { Single } from "./pages/single";
+import { Crystals } from "./pages/crystals";
+import { Consultations } from "./pages/consultations";
+
+import Testimonys2 from "./pages/testimony2.jsx";
+import Testimonys3 from "./pages/testimony3.jsx";
+import Testimonys4 from "./pages/testimony4.jsx";
+
 import injectContext from "./store/appContext";
 
 import { Navbar } from "./component/navbar";
 import { Footer } from "./component/footer";
+
 
 //create your first component
 const Layout = () => {
@@ -26,7 +38,17 @@ const Layout = () => {
                     <Navbar />
                     <Routes>
                         <Route element={<Home />} path="/" />
-                        <Route element={<Demo />} path="/demo" />
+                        <Route element={<About />} path="/aboutUs" />
+                        <Route element={<Brands />} path="/brands" />
+                        <Route element={<Users />} path="/usersacces" />
+                        <Route element={<Admin />} path="/usersadmin" />
+                        <Route element={<Sales />} path="/sales" />
+                        <Route element={<Crystals />} path="/crystals" />
+                        <Route element={<Consultations/>} path="/consultations"/>
+                        <Route element={<Testimonys2 />} path="/testimony2"  />
+                        <Route element={<Testimonys3 />} path="/testimony3"  />
+                        <Route element={<Testimonys3 />} path="/testimony4/:id"  />
+                        <Route element={<Testimonys4/>} path="/testimony4"/>
                         <Route element={<Single />} path="/single/:theid" />
                         <Route element={<h1>Not found!</h1>} />
                     </Routes>
@@ -35,6 +57,10 @@ const Layout = () => {
             </BrowserRouter>
         </div>
     );
+};
+
+export default injectContext(Layout);
+
 };
 
 export default injectContext(Layout);
