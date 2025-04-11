@@ -2,6 +2,16 @@ import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 
+import { Home } from "./pages/home";
+import { About } from "./pages/aboutUs";
+import { Brands } from "./pages/brands";
+import { Users } from "./pages/usersacces.js";
+import { Admin } from "./pages/usersadmin.js";
+import { Sales } from "./pages/sales";
+import { Single } from "./pages/single";
+import { Crystals } from "./pages/crystals";
+import { Consultations } from "./pages/consultations";
+
 import injectContext from "./store/appContext";
 
 import ScrollToTop from "./component/scrollToTop";
@@ -50,7 +60,6 @@ const Layout = () => {
                     <Navbar />
                     <ToastContainer position="top-right" autoClose={3000} />
                     <Routes>
-                        <Route path="/" element={<Dashboard />} />
 
                         <Route path="/patients" element={<PatientsPage />} />
                         <Route path="/patients/new" element={<CreatePatient />} />
@@ -73,6 +82,16 @@ const Layout = () => {
                         <Route path="/notifications" element={<NotificationsPage />} />
                         <Route path="/comments" element={<CommentsPage />} />
                         <Route path="/stats" element={<StatsPage />} />
+
+                        <Route element={<Home />} path="/" />
+                        <Route element={<About />} path="/aboutUs" />
+                        <Route element={<Brands />} path="/brands" />
+                        <Route element={<Users />} path="/usersacces" />
+                        <Route element={<Admin />} path="/usersadmin" />
+                        <Route element={<Sales />} path="/sales" />
+                        <Route element={<Crystals />} path="/crystals" />
+                        <Route element={<Consultations />} path="/consultations" />
+                        <Route element={<h1>Not found!</h1>} />
                     </Routes>
                     <Footer />
                 </ScrollToTop>

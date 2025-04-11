@@ -7,7 +7,7 @@
   "[dotenv]": {
     "editor.defaultFormatter": "foxundermoon.shell-format"
   },
-  "cSpell.words": ["backref", "pdfgen"],
+  "cSpell.words": ["backref", "pdfgen", "usersacces"],
   "[python]": {
     "editor.defaultFormatter": "ms-python.black-formatter"
   },
