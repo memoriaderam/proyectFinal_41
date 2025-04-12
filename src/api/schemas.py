@@ -81,7 +81,7 @@ class PrescriptionSchema(SQLAlchemySchema):
         load_instance = True
 
     id = auto_field()
-    identity_number = auto_field()
+    dni = auto_field()
     left_eye_sph = auto_field()
     right_eye_sph = auto_field()
     left_eye_cyl = auto_field()

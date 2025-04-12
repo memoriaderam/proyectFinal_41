@@ -10,7 +10,7 @@ import * as yup from "yup";
 const schema = yup.object({
     full_name: yup.string().required("Nombre es requerido"),
     email: yup.string().email("Email inválido").required("Email requerido"),
-    identity_number: yup.string().required("ID requerido"),
+    dni: yup.string().required("ID requerido"),
     password: yup.string().min(6, "Mínimo 6 caracteres").required("Contraseña requerida"),
     gender: yup.string().required("Género requerido"),
     age: yup.number().positive("Edad inválida").integer().required("Edad requerida"),
@@ -34,8 +34,8 @@ export const PatientForm = ({ onSubmit }) => {
             <input {...register("email")} placeholder="Email" type="email" />
             <p>{errors.email?.message}</p>
 
-            <input {...register("identity_number")} placeholder="RUT o ID" />
-            <p>{errors.identity_number?.message}</p>
+            <input {...register("dni")} placeholder="RUT o ID" />
+            <p>{errors.dni?.message}</p>
 
             <input type="password" {...register("password")} placeholder="Contraseña" />
             <p>{errors.password?.message}</p>

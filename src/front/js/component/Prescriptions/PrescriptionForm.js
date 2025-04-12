@@ -7,7 +7,7 @@ import { Context } from "../../store/appContext";
 import { toast } from "react-toastify";
 
 const schema = yup.object().shape({
-    identity_number: yup.number().required("Paciente requerido"),
+    dni: yup.number().required("Paciente requerido"),
     left_eye_sph: yup.number().required(),
     right_eye_sph: yup.number().required(),
     left_eye_cyl: yup.number().required(),
@@ -55,15 +55,15 @@ export const PrescriptionForm = ({ onSubmit, defaultValues = {} }) => {
         <Form onSubmit={handleSubmit(handleFormSubmit)}>
             <Form.Group>
                 <Form.Label>Paciente</Form.Label>
-                <Form.Select {...register("identity_number")}>
+                <Form.Select {...register("dni")}>
                     <option value="">Seleccione un paciente</option>
                     {store.patients.map((p) => (
-                        <option key={p.identity_number} value={p.identity_number}>
+                        <option key={p.dni} value={p.dni}>
                             {p.full_name}
                         </option>
                     ))}
                 </Form.Select>
-                <p className="text-danger">{errors.identity_number?.message}</p>
+                <p className="text-danger">{errors.dni?.message}</p>
             </Form.Group>
 
             {[

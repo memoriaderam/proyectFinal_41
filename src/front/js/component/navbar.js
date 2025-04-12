@@ -5,7 +5,7 @@ import Home from "../pages/home.js";
 
 export const Navbar = () => {
   return (
-    <nav className="navbar fixed-top nav">
+    <nav className="navbar navbar-fixed-top nav">
       <div className="container-fluid">
         <a className="navbar-brand" href="/">
           <h1>Mundo Optico 20/20</h1>
@@ -54,7 +54,7 @@ export const Navbar = () => {
         </button>
 
         <div
-          className="offcanvas offcanvas-end text-bg-dark"
+          className="offcanvas offcanvas-end text-bg-light"
           tabindex="-1"
           id="offcanvasDarkNavbar"
           aria-labelledby="offcanvasDarkNavbarLabel border"
@@ -117,6 +117,7 @@ export const Navbar = () => {
         </div>
       </div>
     </nav>
+
   );
 };
 

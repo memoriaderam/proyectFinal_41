@@ -14,9 +14,9 @@ export const PrescriptionTable = ({ prescriptions, onView, onEdit }) => (
         </thead>
         <tbody>
             {prescriptions.map((rx) => (
-                <tr key={rx.prescrip_id}>
-                    <td>{rx.prescrip_id}</td>
-                    <td>{rx.identity_number}</td>
+                <tr key={rx.prescription_id}>
+                    <td>{rx.id}</td>
+                    <td>{rx.dni}</td>
                     <td>{rx.dated_at?.split("T")[0]}</td>
                     <td>{rx.notes || "N/A"}</td>
                     <td>
