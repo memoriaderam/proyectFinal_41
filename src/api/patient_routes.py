@@ -28,7 +28,7 @@ def register_patient_routes(api):
             user_data = user_create_schema.load(data, session=db.session)
 
             if (
-                User.query.get(user_data.identity_number)
+                User.query.get(user_data.dni)
                 or User.query.filter_by(email=user_data.email).first()
             ):
                 raise APIException("El paciente ya existe", 409)

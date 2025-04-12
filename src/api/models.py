@@ -106,7 +106,7 @@ class Post(db.Model):
 class Prescription(db.Model):
     __tablename__ = "prescription"
     id = db.Column(db.Integer, primary_key=True)
-    identity_number = db.Column(
+    dni = db.Column(
         db.Integer,
         db.ForeignKey("user.dni", name="fk_prescription_patient"),
         nullable=False,

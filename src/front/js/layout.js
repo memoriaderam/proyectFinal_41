@@ -43,8 +43,6 @@ import NotificationsPage from "./pages/NotificationsPage.jsx";
 import CommentsPage from "./pages/CommentsPage.jsx";
 import StatsPage from "./pages/StatsPage.jsx";
 
-
-
 //create your first component
 const Layout = () => {
     //the basename is used when your project is published in a subdirectory and not in the root of the domain
@@ -79,6 +77,7 @@ const Layout = () => {
 
 
                         <Route path="/doctors" element={<DoctorsPage />} />
+
                         <Route path="/notifications" element={<NotificationsPage />} />
                         <Route path="/comments" element={<CommentsPage />} />
                         <Route path="/stats" element={<StatsPage />} />

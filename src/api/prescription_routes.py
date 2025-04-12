@@ -34,22 +34,22 @@ def register_prescription_routes(api):
             db.session.rollback()
             raise APIException(f"Error al crear la receta: {str(e)}", status_code=400)
 
-    @api.route("/prescriptions/<int:prescrip_id>", methods=["GET"])
-    def get_prescription(prescrip_id):
-        prescription = Prescription.query.get(prescrip_id)
+    @api.route("/prescriptions/<int:prescription_id>", methods=["GET"])
+    def get_prescription(prescription_id):
+        prescription = Prescription.query.get(prescription_id)
         if not prescription:
             raise APIException("Receta no encontrada", status_code=404)
         return jsonify(prescription_schema.dump(prescription)), 200
 
-    @api.route("/prescriptions/<int:prescrip_id>", methods=["PUT"])
-    def update_prescription(prescrip_id):
-        prescription = Prescription.query.get(prescrip_id)
+    @api.route("/prescriptions/<int:prescription_id>", methods=["PUT"])
+    def update_prescription(prescription_id):
+        prescription = Prescription.query.get(prescription_id)
         if not prescription:
             raise APIException("Receta no encontrada", status_code=404)
 
         updates = request.get_json()
         campos_permitidos = [
-            "identity_number",
+            "dni",
             "left_eye_sph",
             "right_eye_sph",
             "left_eye_cyl",
@@ -72,9 +72,9 @@ def register_prescription_routes(api):
         db.session.commit()
         return jsonify({"message": "Receta actualizada correctamente"}), 200
 
-    @api.route("/prescriptions/<int:prescrip_id>", methods=["DELETE"])
-    def delete_prescription(prescrip_id):
-        prescription = Prescription.query.get(prescrip_id)
+    @api.route("/prescriptions/<int:prescription_id>", methods=["DELETE"])
+    def delete_prescription(prescription_id):
+        prescription = Prescription.query.get(prescription_id)
         if not prescription:
             raise APIException("Receta no encontrada", status_code=404)
 
@@ -87,13 +87,13 @@ def register_prescription_routes(api):
         prescriptions = Prescription.query.all()
         return jsonify(prescriptions_schema.dump(prescriptions)), 200
 
-    @api.route("/prescriptions/<int:prescrip_id>/download", methods=["GET"])
-    def download_prescription_pdf(prescrip_id):
-        rx = Prescription.query.get(prescrip_id)
+    @api.route("/prescriptions/<int:prescription_id>/download", methods=["GET"])
+    def download_prescription_pdf(prescription_id):
+        rx = Prescription.query.get(prescription_id)
         if not rx:
             raise APIException("Receta no encontrada", 404)
 
-        patient = User.query.filter_by(identity_number=rx.identity_number).first()
+        patient = User.query.filter_by(dni=rx.dni).first()
         patient_name = patient.full_name if patient else "Paciente desconocido"
 
         buffer = BytesIO()
@@ -102,8 +102,8 @@ def register_prescription_routes(api):
         p.drawString(200, 800, "Receta Óptica")
 
         p.setFont("Helvetica", 12)
-        p.drawString(100, 770, f"ID Receta: {rx.prescrip_id}")
-        p.drawString(100, 750, f"Paciente: {rx.identity_number} - {patient_name}")
+        p.drawString(100, 770, f"ID Receta: {rx.prescription_id}")
+        p.drawString(100, 750, f"Paciente: {rx.dni} - {patient_name}")
         p.drawString(100, 730, f"Fecha: {rx.dated_at.strftime('%Y-%m-%d')}")
 
         p.drawString(100, 700, f"Ojo Izquierdo:")
@@ -126,5 +126,5 @@ def register_prescription_routes(api):
             buffer,
             mimetype="application/pdf",
             as_attachment=True,
-            download_name=f"receta_{rx.prescrip_id}.pdf",
+            download_name=f"receta_{rx.prescription_id}.pdf",
         )

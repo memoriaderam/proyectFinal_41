@@ -10,9 +10,10 @@
 
 .nav {
 
-    background-color: aliceblue;
-    color:black;
+     background-color: aliceblue;
+     color: black;
 }
+
 /*
 .border {
 
@@ -24,7 +25,7 @@
 .button {
      border: 1px solid blue;
 }
-     
+
 
 .date {
 
@@ -40,18 +41,12 @@
      align-content: left;
 }
 
-.justify
-{
+.justify {
      text-align: justify;
 }
 
-.center
-{
+.center {
      text-align: center;
 }
-css: This website contains selectors only used in home.css
 
-    All pages share the styles on index.css but you should create 
-    one more css for each page that will contain the selected used 
-    on that page only (the ones not reused in other pages).
-*/
+css: This website contains selectors only used in home.css All pages share the styles on index.css but you should create one more css for each page that will contain the selected used on that page only (the ones not reused in other pages). */

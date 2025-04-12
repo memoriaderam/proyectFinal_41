@@ -34,7 +34,7 @@ export const OrderForm = ({ onSubmit, defaultValues = {} }) => {
 
             <Form.Group className="mb-3">
                 <Form.Label>ID de Receta</Form.Label>
-                <Form.Control type="number" {...register("prescrip_id")} />
+                <Form.Control type="number" {...register("prescription_id")} />
                 <p className="text-danger">{errors.prescrip_id?.message}</p>
             </Form.Group>
 
