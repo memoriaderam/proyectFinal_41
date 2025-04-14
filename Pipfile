@@ -6,14 +6,10 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
-flask = "*"
 sqlalchemy = "==1.4.46"
-flask-sqlalchemy = "*"
-flask-migrate = "*"
 flask-swagger = "*"
 psycopg2-binary = "*"
 python-dotenv = "*"
-flask-cors = "*"
 gunicorn = "*"
 cloudinary = "*"
 flask-admin = "*"
@@ -24,6 +20,10 @@ werkzeug = "*"
 marshmallow = "*"
 marshmallow-sqlalchemy = "*"
 reportlab = "*"
+flask-cors = "*"
+flask = "*"
+flask-sqlalchemy = "*"
+flask-migrate = "*"
 
 [requires]
 python_version = "3.10"

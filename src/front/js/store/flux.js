@@ -42,7 +42,7 @@ const getState = ({ getStore, getActions, setStore }) => ({
 		notifications: [],
 		comments: [],
 		stats: {},
-		message: null // conservado por compatibilidad
+		message: null
 	},
 
 	actions: {
@@ -52,14 +52,12 @@ const getState = ({ getStore, getActions, setStore }) => ({
 		},
 		createPatient: async (patient) => {
 			try {
-				const res = await createPatient(patient); // ahora sí es un Response completo
-
+				const res = await createPatient(patient);
 				if (!res.ok) {
 					const errorData = await res.json().catch(() => ({}));
 					const message = errorData.message || "Error al crear paciente";
 					throw new Error(message);
 				}
-
 				await getActions().loadPatients();
 				return true;
 			} catch (err) {
@@ -155,7 +153,6 @@ const getState = ({ getStore, getActions, setStore }) => ({
 			setStore({ stats: data });
 		},
 
-		// función de prueba original (opcional)
 		getMessage: async () => {
 			try {
 				const resp = await fetch(`${API_URL}/api/hello`);
@@ -167,10 +164,78 @@ const getState = ({ getStore, getActions, setStore }) => ({
 			}
 		},
 
+		// Función de ejemplo visual
 		exampleFunction: () => {
 			const store = getStore();
 			const demo = store.demo?.map((elm, i) => ({ ...elm, background: i === 0 ? "green" : elm.background }));
 			setStore({ demo });
+		},
+
+		createPost: async (newPost) => {
+			try {
+				const res = await fetch(`${process.env.BACKEND_URL}/api/add/post`, {
+					method: "POST",
+					body: newPost
+				});
+				if (!res.ok) {
+					const errorText = await res.text();
+					throw new Error(errorText || "Error al crear el post");
+				}
+				return { success: true };
+			} catch (error) {
+				console.error("Error al crear post:", error);
+				return { success: false, error: error.message };
+			}
+		},
+
+		getPost: async () => {
+			try {
+				const res = await fetch(`${process.env.BACKEND_URL}/api/post/list`);
+				if (!res.ok) {
+					const errorText = await res.text();
+					throw new Error(errorText || "Error al obtener posts");
+				}
+				const data = await res.json();
+				return data;
+			} catch (error) {
+				console.error("Error al obtener posts:", error);
+				return [];
+			}
+		},
+
+		updatePost: async (postId, updatedData) => {
+			try {
+				const res = await fetch(`${process.env.BACKEND_URL}/api/edit/post/${postId}`, {
+					method: "PUT",
+					body: updatedData
+				});
+				if (!res.ok) {
+					const text = await res.text();
+					throw new Error(text || "Error al actualizar post");
+				}
+				const data = await res.json();
+				return { success: true, message: data.message };
+			} catch (error) {
+				console.error("Error al actualizar post:", error);
+				return { success: false, error: error.message };
+			}
+		},
+
+		deletePost: async (postId) => {
+			try {
+				const res = await fetch(`${process.env.BACKEND_URL}/api/delete/post/${postId}`, {
+					method: "DELETE"
+				});
+				if (!res.ok) {
+					const text = await res.text();
+					throw new Error(text || "Error al eliminar post");
+				}
+				const data = await res.json();
+				return { success: true, message: data.message };
+			} catch (error) {
+				console.error("Error al eliminar post:", error);
+				return { success: false, error: error.message };
+			}
 		}
 	}
 });
