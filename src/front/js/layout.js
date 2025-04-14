@@ -7,7 +7,6 @@ import { About } from "./pages/aboutUs";
 import { Brands } from "./pages/brands";
 import { Users } from "./pages/usersacces.js";
 import { Admin } from "./pages/usersadmin.js";
-import { Sales } from "./pages/sales";
 import { Crystals } from "./pages/crystals";
 import { Consultations } from "./pages/consultations";
 
@@ -82,6 +81,12 @@ const Layout = () => {
                         <Route element={<Sales />} path="/sales" />
                         <Route element={<Crystals />} path="/crystals" />
                         <Route element={<Consultations />} path="/consultations" />
+                        <Route element={<Consultations />} path="/consultations" />
+                        <Route element={<Testimonys2 />} path="/testimony2" />
+                        <Route element={<Testimonys3 />} path="/testimony3" />
+                        <Route element={<Testimonys3 />} path="/testimony4/:id" />
+                        <Route element={<Testimonys4 />} path="/testimony4" />
+                        <Route element={<Single />} path="/single/:theid" />
                         <Route element={<h1>Not found!</h1>} />
                     </Routes>
                     <Footer />
