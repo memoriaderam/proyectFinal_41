@@ -33,6 +33,7 @@ import { CreatePrescription } from "./pages/Prescriptions/CreatePrescription.jsx
 import { EditPrescription } from "./pages/Prescriptions/EditPrescription.jsx";
 import { ViewPrescription } from "./pages/Prescriptions/ViewPrescription.jsx";
 
+import { Sales } from "./pages/sales.js"
 import AppointmentsPage from "./pages/AppointmentsPage.jsx";
 import DoctorsPage from "./pages/DoctorsPage.jsx";
 import NotificationsPage from "./pages/NotificationsPage.jsx";
