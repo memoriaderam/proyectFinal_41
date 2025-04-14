@@ -53,19 +53,30 @@ def create_post():
 
 @api.route('/edit/post/<int:post_id>', methods=['PUT'])
 def update_post(post_id):
-
     try:
         post = Post.query.get(post_id)
-        
+
         if not post:
-            return jsonify({"error": "Post no foud"}), 404
+            return jsonify({"error": "Post no found"}), 404
 
-        data = request.get_json()
+        # Datos que llegan del formulario (textos)
+        post.offers = request.form.get('offers', post.offers)
+        post.article = request.form.get('article', post.article)
+        post.doctor_id = request.form.get('doctor_id', post.doctor_id)
 
-        # Actualiza solo si existe el campo
-        post.offers = data.get('offers', post.offers)
-        post.article = data.get('article', post.article)
-        post.doctor_id = data.get('doctor_id', post.doctor_id)
+        # Si viene una nueva imagen
+        if 'image' in request.files:
+            image = request.files['image']
+
+            if image.filename != '':
+                uploads_folder = os.path.join(os.getcwd(), 'uploads')
+                os.makedirs(uploads_folder, exist_ok=True)
+
+                image_path = os.path.join('uploads', image.filename)
+                full_path = os.path.join(uploads_folder, image.filename)
+                image.save(full_path)
+
+                post.image_url = image_path
 
         db.session.commit()
 
@@ -75,11 +86,13 @@ def update_post(post_id):
                 "post_id": post.id,
                 "offers": post.offers,
                 "article": post.article,
-                "doctor_id": post.doctor_id
+                "doctor_id": post.doctor_id,
+                "image_url": post.image_url
             }
         }), 200
+
     except Exception as e:
-        return({'error': 'error server', 'details':str(e)}),500
+        return jsonify({'error': 'Error server', 'details': str(e)}), 500
 
 
 
