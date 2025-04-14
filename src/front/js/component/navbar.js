@@ -10,12 +10,6 @@ export const Navbar = () => {
         <a className="navbar-brand" href="/">
           <h1>Mundo Optico 20/20</h1>
         </a>
-
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
         <a
           className="nav-link"
           href="https://www.google.co.ve/maps/place/MUNDO+OPTICO+2020/@10.5055061,-66.9002482,17z/data=!3m1!4b1!4m6!3m5!1s0x8c2a593d25221417:0xb28ad4a9d3c259a9!8m2!3d10.5055061!4d-66.9002482!16s%2Fg%2F11fky7qmzc?hl=es&entry=ttu&g_ep=EgoyMDI1MDMyNS4xIKXMDSoJLDEwMjExNDU1SAFQAw%3D%3D"
