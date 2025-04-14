@@ -17,7 +17,7 @@ import { BackendURL } from "./component/backendURL";
 import { Navbar } from "./component/navbar";
 import { Footer } from "./component/footer";
 // import POST
-import PostList from "./pages/postList"; 
+import PostList from "./pages/postList";
 import Post from "./pages/post";
 import EditPost from "./pages/editPost";
 
@@ -39,7 +39,6 @@ import { EditPrescription } from "./pages/Prescriptions/EditPrescription.jsx";
 import { ViewPrescription } from "./pages/Prescriptions/ViewPrescription.jsx";
 
 import { Sales } from "./pages/sales.js"
-import AppointmentsPage from "./pages/AppointmentsPage.jsx";
 import DoctorsPage from "./pages/DoctorsPage.jsx";
 import NotificationsPage from "./pages/NotificationsPage.jsx";
 import CommentsPage from "./pages/CommentsPage.jsx";
@@ -87,19 +86,14 @@ const Layout = () => {
                         <Route element={<Sales />} path="/sales" />
                         <Route element={<Crystals />} path="/crystals" />
                         <Route element={<Consultations />} path="/consultations" />
-                        <Route element={<Consultations />} path="/consultations" />
-                        <Route element={<Testimonys2 />} path="/testimony2" />
-                        <Route element={<Testimonys3 />} path="/testimony3" />
-                        <Route element={<Testimonys3 />} path="/testimony4/:id" />
-                        <Route element={<Testimonys4 />} path="/testimony4" />
-                        <Route element={<Single />} path="/single/:theid" />
+
                         <Route element={<h1>Not found!</h1>} />
 
                         // post
                         <Route path="/posts" element={<PostList />} />
                         <Route path="/create/post" element={<Post />} />
                         <Route path="/edit_post/:id" element={<EditPost />} />
-                        
+
                     </Routes>
                     <Footer />
                 </ScrollToTop>
