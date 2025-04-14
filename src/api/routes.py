@@ -15,6 +15,7 @@ CORS(api)
 
 from api import post_routes
 from api import sing_up
+from api import login
 
 
 @api.route('/hello', methods=['POST', 'GET'])
