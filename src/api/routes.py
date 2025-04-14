@@ -20,6 +20,10 @@ from api.doctor_routes import register_doctor_routes
 from api.notification_routes import register_notification_routes
 from api.stats_routes import register_stats_routes
 
+from api import post_routes
+from api import sing_up
+from api import login
+
 # Registro modular de rutas
 register_patient_routes(api)
 register_order_routes(api)
@@ -31,10 +35,7 @@ register_notification_routes(api)
 register_stats_routes(api)
 
 
-# ----------------------------
-# Ruta simple de prueba
-# ----------------------------
-@api.route("/hello", methods=["GET", "POST"])
+@api.route("/hello", methods=["POST", "GET"])
 def handle_hello():
     return (
         jsonify(
