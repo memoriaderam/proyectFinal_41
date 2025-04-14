@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import { getOrders } from "../../services/orderService";
 import { useNavigate } from "react-router-dom";
 import { OrderTable } from "../../component/Orders/OrderTable";
-import { Button } from "react-bootstrap";
+import { Button, Spinner } from "react-bootstrap";
 import { toast } from "react-toastify";
 
 export const OrdersPage = () => {
     const [orders, setOrders] = useState([]);
+    const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
     const fetchOrders = async () => {
@@ -15,6 +16,8 @@ export const OrdersPage = () => {
             setOrders(data);
         } catch (error) {
             toast.error(error.message);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -25,15 +28,19 @@ export const OrdersPage = () => {
     return (
         <div className="container mt-4">
             <h2>Pedidos</h2>
-            <Button variant="primary" onClick={() => navigate("/orders/new")}>
-                ➕ Nuevo Pedido
-            </Button>
+            <Button variant="primary" onClick={() => navigate("/orders/new")}>➕ Nuevo Pedido</Button>
             <hr />
-            <OrderTable
-                orders={orders}
-                onView={(order) => navigate(`/orders/${order.order_id}`)}
-                onEdit={(order) => navigate(`/orders/${order.order_id}/edit`)}
-            />
+            {loading ? (
+                <Spinner animation="border" className="mt-3" />
+            ) : orders.length === 0 ? (
+                <p className="text-muted">No hay pedidos registrados.</p>
+            ) : (
+                <OrderTable
+                    orders={orders}
+                    onView={(order) => navigate(`/orders/${order.id}`)}
+                    onEdit={(order) => navigate(`/orders/${order.id}/edit`)}
+                />
+            )}
         </div>
     );
 };

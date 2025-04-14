@@ -14,7 +14,7 @@ export const PrescriptionTable = ({ prescriptions, onView, onEdit }) => (
         </thead>
         <tbody>
             {prescriptions.map((rx) => (
-                <tr key={rx.prescription_id}>
+                <tr key={rx.id}>
                     <td>{rx.id}</td>
                     <td>{rx.dni}</td>
                     <td>{rx.dated_at?.split("T")[0]}</td>
@@ -28,3 +28,4 @@ export const PrescriptionTable = ({ prescriptions, onView, onEdit }) => (
         </tbody>
     </Table>
 );
+

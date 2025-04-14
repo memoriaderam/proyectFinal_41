@@ -57,8 +57,8 @@ def register_order_routes(api):
         try:
             data = request.get_json()
             campos_permitidos = [
-                "identity_number",
-                "prescrip_id",
+                "dni",  # 🛠 CORREGIDO: antes era "identity_number" que no existe
+                "prescription_id",  # 🛠 CORREGIDO: antes era "prescrip_id"
                 "status",
                 "lens_type",
                 "frame_type",
@@ -67,7 +67,6 @@ def register_order_routes(api):
             ]
             for key, value in data.items():
                 if key in campos_permitidos:
-                    # Convertir fecha si es necesario
                     if key == "dated_at":
                         try:
                             value = datetime.fromisoformat(value)

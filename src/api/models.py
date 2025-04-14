@@ -33,14 +33,32 @@ class User(db.Model):
     )
     create_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
 
+    # Relaciones con cascade
     appointments = db.relationship(
         "Appointment",
         backref="patient",
-        foreign_keys="Appointment.identity_number",
+        foreign_keys="Appointment.dni",
         lazy=True,
+        cascade="all, delete-orphan",
+        passive_deletes=True,
     )
-    prescriptions = db.relationship("Prescription", backref="patient", lazy=True)
-    orders = db.relationship("Order", backref="patient", lazy=True)
+
+    prescriptions = db.relationship(
+        "Prescription",
+        backref="patient",
+        lazy=True,
+        cascade="all, delete-orphan",
+        passive_deletes=True,
+    )
+
+    orders = db.relationship(
+        "Order",
+        backref="patient",
+        lazy=True,
+        cascade="all, delete-orphan",
+        passive_deletes=True,
+    )
+
     posts = db.relationship(
         "Post", backref="doctor", foreign_keys="Post.doctor_id", lazy=True
     )
@@ -59,7 +77,7 @@ class User(db.Model):
 class Appointment(db.Model):
     __tablename__ = "appointment"
     id = db.Column(db.Integer, primary_key=True)
-    identity_number = db.Column(
+    dni = db.Column(
         db.Integer,
         db.ForeignKey("user.dni", name="fk_appointment_patient"),
         nullable=False,
@@ -77,7 +95,7 @@ class Appointment(db.Model):
     )
 
     def __repr__(self):
-        return f"<Appointment {self.id_app}>"
+        return f"<Appointment {self.id}>"
 
 
 # Publicaciones u ofertas hechas por doctores
@@ -119,22 +137,31 @@ class Prescription(db.Model):
     right_eye_axis = db.Column(db.Integer, nullable=False)
     notes = db.Column(db.String(255), nullable=True)
     dated_at = db.Column(db.DateTime, nullable=False)
-    orders = db.relationship("Order", backref="prescription", lazy=True)
+    orders = db.relationship(
+        "Order",
+        backref="prescription",
+        cascade="all, delete-orphan",
+        passive_deletes=True,
+    )
 
     def __repr__(self):
-        return f"<Prescription {self.prescrip_id}>"
+        return f"<Prescription {self.id}>"
 
 
 # Pedidos de lentes ópticos
 class Order(db.Model):
     __tablename__ = "order"
-    order_id = db.Column(db.Integer, primary_key=True)
-    identity_number = db.Column(
-        db.Integer, db.ForeignKey("user.dni", name="fk_order_patient"), nullable=False
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    dni = db.Column(
+        db.Integer,
+        db.ForeignKey("user.dni", name="fk_order_patient", ondelete="CASCADE"),
+        nullable=False,
     )
     prescription_id = db.Column(
         db.Integer,
-        db.ForeignKey("prescription.id", name="fk_order_prescription"),
+        db.ForeignKey(
+            "prescription.id", name="fk_order_prescription", ondelete="CASCADE"
+        ),
         nullable=False,
     )
     status = db.Column(db.String(20), nullable=False)
@@ -144,7 +171,7 @@ class Order(db.Model):
     dated_at = db.Column(db.DateTime, nullable=False)
 
     def __repr__(self):
-        return f"<Order {self.order_id}>"
+        return f"<Order {self.id}>"
 
 
 ################# modelos extras ######################

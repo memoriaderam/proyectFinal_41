@@ -28,7 +28,7 @@ export const PatientTable = ({ patients, onEdit, onView, onDelete }) => {
                     <>
                         <Button variant="info" size="sm" onClick={() => onView(patient)}><FaEye /></Button>{' '}
                         <Button variant="warning" size="sm" onClick={() => onEdit(patient)}><FaEdit /></Button>{' '}
-                        <Button variant="danger" size="sm" onClick={() => onDelete(patient.identity_number)}><FaTrash /></Button>                    </>
+                        <Button variant="danger" size="sm" onClick={() => onDelete(patient.dni)}><FaTrash /></Button>                    </>
                 );
             },
         }),

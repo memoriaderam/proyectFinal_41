@@ -16,7 +16,7 @@ export const EditPatient = () => {
     const onSubmit = async (data) => {
         await updatePatient(id, data);
         toast.success("Paciente actualizado");
-        navigate("/pacientes");
+        navigate("/patients");
     };
 
     return (
