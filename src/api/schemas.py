@@ -56,7 +56,7 @@ class AppointmentSchema(SQLAlchemySchema):
         load_instance = True
 
     id = auto_field()
-    identity_number = auto_field()
+    dni = auto_field()
     doctor_id = auto_field()
     create_at = auto_field()
     update_at = auto_field()
@@ -98,8 +98,8 @@ class OrderSchema(SQLAlchemySchema):
         model = Order
         load_instance = True
 
-    order_id = auto_field()
-    identity_number = auto_field()
+    id = auto_field()
+    dni = auto_field()
     prescription_id = auto_field()
     status = auto_field()
     lens_type = auto_field()

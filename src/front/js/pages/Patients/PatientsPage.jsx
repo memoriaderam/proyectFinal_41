@@ -18,10 +18,10 @@ export const PatientsPage = () => {
         fetchPatients();
     }, []);
 
-    const handleDelete = async (identity_number) => {
+    const handleDelete = async (dni) => {
         if (window.confirm("¿Seguro que deseas eliminar este paciente?")) {
             try {
-                await deletePatient(identity_number);
+                await deletePatient(dni);
                 toast.success("Paciente eliminado");
                 fetchPatients(); // refresca la tabla
             } catch (error) {
@@ -39,8 +39,8 @@ export const PatientsPage = () => {
             <hr />
             <PatientTable
                 patients={patients}
-                onView={(p) => navigate(`/patients/${p.identity_number}`)}
-                onEdit={(p) => navigate(`/patients/${p.identity_number}/update`)}
+                onView={(p) => navigate(`/patients/${p.dni}`)}
+                onEdit={(p) => navigate(`/patients/${p.dni}/update`)}
                 onDelete={handleDelete}
             />
         </div>

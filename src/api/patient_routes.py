@@ -44,10 +44,10 @@ def register_patient_routes(api):
         except Exception as e:
             raise APIException(f"Error al crear paciente: {str(e)}", 500)
 
-    @api.route("/patients/<int:identity_number>", methods=["PUT"])
-    def update_patient(identity_number):
+    @api.route("/patients/<int:dni>", methods=["PUT"])
+    def update_patient(dni):
         try:
-            patient = User.query.get(identity_number)
+            patient = User.query.filter_by(dni=dni).first()
             if not patient:
                 raise APIException("Paciente no encontrado", status_code=404)
 
@@ -77,13 +77,33 @@ def register_patient_routes(api):
         except Exception as e:
             raise APIException(f"Error al actualizar paciente: {str(e)}", 500)
 
-    @api.route("/patients/<int:identity_number>", methods=["DELETE"])
-    def delete_patient(identity_number):
-        patient = User.query.get(identity_number)
+    @api.route("/patients/<int:dni>", methods=["DELETE"])
+    def delete_patient(dni):
+        patient = User.query.filter_by(dni=dni).first()
         if not patient:
             raise APIException("Paciente no encontrado", status_code=404)
+
+        # Verificar si hay órdenes que no estén entregadas
+        ordenes_no_entregadas = [
+            order for order in patient.orders if order.status != "entregado"
+        ]
+        if ordenes_no_entregadas:
+            raise APIException(
+                "No se puede eliminar el paciente. Tiene órdenes activas o no entregadas.",
+                status_code=400,
+            )
+
+        # Eliminar recetas asociadas
+        for receta in patient.prescriptions:
+            db.session.delete(receta)
+
+        # Eliminar órdenes entregadas
+        for orden in patient.orders:
+            db.session.delete(orden)
+
         db.session.delete(patient)
         db.session.commit()
+
         return jsonify({"message": "Paciente eliminado correctamente"}), 200
 
     @api.route("/patients", methods=["GET"])
@@ -91,9 +111,9 @@ def register_patient_routes(api):
         patients = User.query.filter_by(role_id=3).all()
         return jsonify(users_schema.dump(patients)), 200
 
-    @api.route("/patients/<int:identity_number>", methods=["GET"])
-    def get_single_patient(identity_number):
-        patient = User.query.get(identity_number)
+    @api.route("/patients/<int:dni>", methods=["GET"])
+    def get_single_patient(dni):
+        patient = User.query.filter_by(dni=dni).first()
         if not patient:
             raise APIException("Paciente no encontrado", status_code=404)
         return jsonify(user_schema.dump(patient)), 200

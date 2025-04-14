@@ -7,7 +7,7 @@ import {
     createColumnHelper
 } from "@tanstack/react-table";
 import { Table, FormControl, InputGroup, Button } from "react-bootstrap";
-import { FaEdit, FaEye } from "react-icons/fa";
+import { FaEdit, FaEye, FaDollarSign, FaIdCard } from "react-icons/fa";
 import { OrderStatusBadge } from "./OrderStatusBadge";
 
 export const OrderTable = ({ orders, onView, onEdit }) => {
@@ -15,11 +15,15 @@ export const OrderTable = ({ orders, onView, onEdit }) => {
     const columnHelper = createColumnHelper();
 
     const columns = useMemo(() => [
-        columnHelper.accessor("identity_number", { header: "Paciente (RUT)" }),
-        columnHelper.accessor("prescrip_id", { header: "ID Receta" }),
+        columnHelper.accessor("dni", {
+            header: () => (<><FaIdCard className="me-1" />Paciente (RUT)</>)
+        }),
+        columnHelper.accessor("prescription_id", { header: "ID Receta" }),
         columnHelper.accessor("lens_type", { header: "Tipo Lente" }),
         columnHelper.accessor("frame_type", { header: "Tipo Marco" }),
-        columnHelper.accessor("price", { header: "Precio" }),
+        columnHelper.accessor("price", {
+            header: () => (<><FaDollarSign className="me-1" />Precio</>)
+        }),
         columnHelper.accessor("status", {
             header: "Estado",
             cell: ({ getValue }) => <OrderStatusBadge status={getValue()} />
@@ -52,13 +56,13 @@ export const OrderTable = ({ orders, onView, onEdit }) => {
         <>
             <InputGroup className="mb-3">
                 <FormControl
-                    placeholder="Buscar pedido..."
+                    placeholder="Buscar por RUT, receta, estado..."
                     value={globalFilter}
                     onChange={(e) => setGlobalFilter(e.target.value)}
                 />
             </InputGroup>
 
-            <Table striped bordered hover>
+            <Table striped bordered hover responsive className="shadow-sm">
                 <thead>
                     {table.getHeaderGroups().map(headerGroup => (
                         <tr key={headerGroup.id}>

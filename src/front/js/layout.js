@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 
 import { Home } from "./pages/home";
@@ -8,7 +8,6 @@ import { Brands } from "./pages/brands";
 import { Users } from "./pages/usersacces.js";
 import { Admin } from "./pages/usersadmin.js";
 import { Sales } from "./pages/sales";
-import { Single } from "./pages/single";
 import { Crystals } from "./pages/crystals";
 import { Consultations } from "./pages/consultations";
 
@@ -19,7 +18,6 @@ import { BackendURL } from "./component/backendURL";
 import { Navbar } from "./component/navbar";
 import { Footer } from "./component/footer";
 
-import Dashboard from "./pages/Dashboard.jsx";
 //patients imports
 import { PatientsPage } from './pages/Patients/PatientsPage.jsx';
 import { CreatePatient } from "./pages/Patients/CreatePatient.jsx";
@@ -36,24 +34,20 @@ import { CreatePrescription } from "./pages/Prescriptions/CreatePrescription.jsx
 import { EditPrescription } from "./pages/Prescriptions/EditPrescription.jsx";
 import { ViewPrescription } from "./pages/Prescriptions/ViewPrescription.jsx";
 
-
 import AppointmentsPage from "./pages/AppointmentsPage.jsx";
 import DoctorsPage from "./pages/DoctorsPage.jsx";
 import NotificationsPage from "./pages/NotificationsPage.jsx";
 import CommentsPage from "./pages/CommentsPage.jsx";
 import StatsPage from "./pages/StatsPage.jsx";
 
-//create your first component
 const Layout = () => {
-    //the basename is used when your project is published in a subdirectory and not in the root of the domain
-    // you can set the basename on the .env file located at the root of this project, E.g: BASENAME=/react-hello-webapp/
     const basename = process.env.BASENAME || "";
 
     if (!process.env.BACKEND_URL || process.env.BACKEND_URL == "") return <BackendURL />;
 
     return (
-        <div>
-            <BrowserRouter basename={basename}>
+        <div className="d-flex flex-column min-vh-100">
+            <Router basename={basename}>
                 <ScrollToTop>
                     <Navbar />
                     <ToastContainer position="top-right" autoClose={3000} />
@@ -69,12 +63,10 @@ const Layout = () => {
                         <Route path="/orders/:id/edit" element={<EditOrder />} />
                         <Route path="/orders/:id" element={<ViewOrder />} />
 
-
                         <Route path="/prescriptions" element={<PrescriptionsPage />} />
                         <Route path="/prescriptions/new" element={<CreatePrescription />} />
                         <Route path="/prescriptions/:id/edit" element={<EditPrescription />} />
                         <Route path="/prescriptions/:id" element={<ViewPrescription />} />
-
 
                         <Route path="/doctors" element={<DoctorsPage />} />
 
@@ -94,7 +86,7 @@ const Layout = () => {
                     </Routes>
                     <Footer />
                 </ScrollToTop>
-            </BrowserRouter>
+            </Router>
         </div>
     );
 };

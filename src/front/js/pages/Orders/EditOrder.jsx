@@ -7,12 +7,18 @@ import { toast } from "react-toastify";
 export const EditOrder = () => {
     const { id } = useParams();
     const [order, setOrder] = useState(null);
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
+        if (!id) {
+            toast.error("ID no válido");
+            navigate("/orders");
+            return;
+        }
+
         getOrderById(id)
             .then(data => {
-                // Adaptar fecha para <input type="date" />
                 const formatted = {
                     ...data,
                     dated_at: data.dated_at.split("T")[0]
@@ -20,9 +26,10 @@ export const EditOrder = () => {
                 setOrder(formatted);
             })
             .catch(() => toast.error("Pedido no encontrado"));
-    }, [id]);
+    }, [id, navigate]);
 
     const onSubmit = async (data) => {
+        setLoading(true);
         const adjustedData = {
             ...data,
             dated_at: `${data.dated_at}T00:00:00`
@@ -38,13 +45,19 @@ export const EditOrder = () => {
             navigate("/orders");
         } catch (error) {
             toast.error(error.message);
+        } finally {
+            setLoading(false);
         }
     };
 
     return (
         <div className="container mt-4">
             <h2>Editar Pedido</h2>
-            {order && <OrderForm onSubmit={onSubmit} defaultValues={order} />}
+            {order ? (
+                <OrderForm onSubmit={onSubmit} defaultValues={order} loading={loading} isEdit={true} />
+            ) : (
+                <p className="text-muted">Cargando pedido...</p>
+            )}
         </div>
     );
 };
