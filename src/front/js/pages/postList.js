@@ -37,32 +37,55 @@ const postList = () => {
     };
 
     return (
-        <div className="container mt-5" style={{ maxWidth: "800px" }}>
+        <div className="container mt-5" style={{ maxWidth: "900px" }}>
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <button
                     className="btn btn-success"
-                    onClick={() => navigate("/create/post")} >
+                    onClick={() => navigate("/create/post")}
+                >
                     Crear Post
                 </button>
             </div>
+
             <ul className="list-group">
                 {posts.length === 0 ? (
-                    <li className="list-group-item text-muted text-center">No hay posts disponibles</li>
+                    <li className="list-group-item text-muted text-center">
+                        No hay posts disponibles
+                    </li>
                 ) : (
                     posts.map((post) => (
                         <li key={post.id} className="list-group-item">
-                            <div className="d-flex justify-content-between align-items-start flex-column">
-                                <p className="mb-2"><strong>📰 Artículo:</strong> {post.article}</p>
-                                <p className="mb-2"><strong>💰 Ofertas:</strong> {post.offers}</p>
-                                <p className="mb-3"><strong>🩺 ID Doctor:</strong> {post.doctor_id}</p>
+                            <div className="row">
+                                {/* Imagen Miniatura */}
+                                <div className="col-md-4 d-flex align-items-center justify-content-center">
+                                    <img
+                                        src={`${process.env.BACKEND_URL}/${post.image_url}`}
+                                        alt={post.article}
+                                        className="img-thumbnail"
+                                        style={{ height: "150px", objectFit: "cover" }}
+                                    />
+                                </div>
 
-                                <div className="d-flex justify-content-end gap-2">
-                                    <button className="btn btn-outline-primary btn-sm" onClick={() => handleEdit(post.id)}>
-                                        ✏️ Editar
-                                    </button>
-                                    <button className="btn btn-outline-danger btn-sm" onClick={() => handleDelete(post.id)}>
-                                        🗑️ Eliminar
-                                    </button>
+                                {/* Datos del Post */}
+                                <div className="col-md-8">
+                                    <p className="mb-2"><strong>📰 Artículo:</strong> {post.article}</p>
+                                    <p className="mb-2"><strong>💰 Ofertas:</strong> {post.offers}</p>
+                                    <p className="mb-3"><strong>🩺 ID Doctor:</strong> {post.doctor_id}</p>
+
+                                    <div className="d-flex justify-content-end gap-2">
+                                        <button
+                                            className="btn btn-outline-primary btn-sm"
+                                            onClick={() => handleEdit(post.id)}
+                                        >
+                                            ✏️ Editar
+                                        </button>
+                                        <button
+                                            className="btn btn-outline-danger btn-sm"
+                                            onClick={() => handleDelete(post.id)}
+                                        >
+                                            🗑️ Eliminar
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </li>

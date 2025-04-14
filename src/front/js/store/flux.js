@@ -88,17 +88,14 @@ const getState = ({ getStore, getActions, setStore }) => {
 				try {
 					const res = await fetch(`${process.env.BACKEND_URL}/api/edit/post/${postId}`, {
 						method: "PUT",
-						headers: {
-							"Content-Type": "application/json"
-						},
-						body: JSON.stringify(updatedData)
+						body: updatedData // es FormData no JSON
 					});
-
+			
 					if (!res.ok) {
 						const text = await res.text();
 						throw new Error(text || "Error al actualizar post");
 					}
-
+			
 					const data = await res.json();
 					return { success: true, message: data.message };
 				} catch (error) {
