@@ -29,6 +29,7 @@ class UserSchema(SQLAlchemySchema):
     is_active = auto_field()
     role_id = auto_field()
     create_at = auto_field()
+    reset_token = auto_field()
 
 # Para registro de usuario con password (solo carga, no se serializa)
 class UserCreateSchema(UserSchema):

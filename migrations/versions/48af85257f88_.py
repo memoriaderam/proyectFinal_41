@@ -1,8 +1,8 @@
-"""crear tablas
+"""empty message
 
-Revision ID: 052ff7218896
+Revision ID: 48af85257f88
 Revises: 
-Create Date: 2025-04-04 01:19:36.155602
+Create Date: 2025-04-11 13:38:16.384125
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '052ff7218896'
+revision = '48af85257f88'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -45,6 +45,7 @@ def upgrade():
     sa.Column('is_active', sa.Boolean(), nullable=False),
     sa.Column('role_id', sa.Integer(), nullable=False),
     sa.Column('create_at', sa.DateTime(), nullable=True),
+    sa.Column('reset_token', sa.String(length=200), nullable=True),
     sa.ForeignKeyConstraint(['role_id'], ['role.id'], name='fk_user_role'),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('dni'),
