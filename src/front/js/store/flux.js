@@ -248,26 +248,27 @@ const getState = ({ getStore, getActions, setStore }) => ({
 			}
 		},
 
-		// Recuperación de contraseña
+		//Parte: Ivan
 		handleSubmitReset: async (e, email) => {
 			e.preventDefault();
-			console.log("Se ha solicitado la recuperación de contraseña para:", email);
+			console.log("Se ha solicitado la recuperación de contraseña para el siguiente correo:", email);
 			const response = await getActions().ResetPassword(email);
-			alert(response ? "Correo enviado exitosamente." : "Hubo un error. Intenta de nuevo.");
+			if (response) {
+				alert("Correo enviado exitosamente.");
+			} else {
+				alert("Hubo un error. Intenta de nuevo.");
+			}
 		},
 		ResetPassword: async (email) => {
+			console.log(`${API_URL} reset passwword`);
 			try {
-				const response = await fetch(`${process.env.BACKEND_URL}/api/v1/reset`, {
+				const response = await fetch(`${API_URL}/reset`, {
 					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-					},
+					headers: { "Content-Type": "application/json" },
 					body: JSON.stringify({ email })
 				});
-				if (!response.ok) throw new Error("Error en el servidor");
-				const contentType = response.headers.get("content-type");
-				if (!contentType.includes("application/json")) throw new Error("Respuesta no es JSON");
 				const data = await response.json();
+				if (!response.ok) throw new Error(data?.msg || "Error en el servidor");
 				return data;
 			} catch (error) {
 				console.log("Error al enviar email de recuperación:", error);
@@ -279,15 +280,15 @@ const getState = ({ getStore, getActions, setStore }) => ({
 				e.preventDefault();
 				if (!token) return setError("Debes ingresar el token");
 				if (password !== confirm) return setError("Las contraseñas no coinciden");
-				const resp = await fetch(`${process.env.BACKEND_URL}/api/v1/new_password`, {
+
+				const resp = await fetch(`${API_URL}/new_password`, {
 					method: "PUT",
-					headers: {
-						"Content-Type": "application/json"
-					},
+					headers: { "Content-Type": "application/json" },
 					body: JSON.stringify({ token, password })
 				});
 				const data = await resp.json();
-				if (!resp.ok) return setError(data.msg || "Error al restablecer la contraseña");
+				if (!resp.ok) return setError(data?.msg || "Error al restablecer la contraseña");
+
 				alert("Contraseña actualizada correctamente");
 				navigate("/login");
 			} catch (error) {
@@ -306,30 +307,34 @@ const getState = ({ getStore, getActions, setStore }) => ({
 				});
 				if (!resp.ok) {
 					const error = await resp.json();
+					console.error("Token inválido o expirado:", error.msg);
 					return { valid: false, message: error.msg };
 				}
 				const data = await resp.json();
+				console.log("Token válido:", data.msg);
 				return { valid: true, message: data.msg };
 			} catch (error) {
+				console.error("Error al verificar token:", error);
 				return { valid: false, message: "Error del servidor" };
 			}
 		},
-
 		cancelarCita: async (event_uri, email) => {
 			try {
-				const resp = await fetch(`http://localhost:3001/api/v1/calendly/cancel`, {
+				const resp = await fetch(`${API_URL}/calendly/cancel`, {
 					method: "POST",
 					headers: { "Content-Type": "application/json" },
 					body: JSON.stringify({ event_uri, email })
 				});
 				const data = await resp.json();
-				alert(resp.ok ? "Cita cancelada correctamente" : data.msg || "Error al cancelar cita");
+				if (!resp.ok) alert(data.msg || "Error al cancelar cita");
+				else alert("Cita cancelada correctamente");
 				return data;
 			} catch (error) {
-				alert("Error del servidor al cancelar cita");
 				console.error("Error al cancelar cita:", error);
+				alert("Error del servidor al cancelar cita");
 			}
 		}
+
 	}
 });
 

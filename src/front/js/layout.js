@@ -21,7 +21,6 @@ import { Register } from "./pages/register";
 import { Reset } from "./pages/reset";
 import { Dashboard } from "./pages/dashboard";
 import { New_Password } from "./pages/new_password";
-import injectContext from "./store/appContext";
 
 import { Profile } from "./pages/dashboard/profile";
 import { Orders } from "./pages/dashboard/orders";
@@ -34,7 +33,6 @@ import { Footer } from "./component/footer";
 import PostList from "./pages/postList";
 import Post from "./pages/post";
 import EditPost from "./pages/editPost";
-import { Login } from "./pages/login";
 
 
 //patients imports

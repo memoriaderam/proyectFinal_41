@@ -1,37 +1,36 @@
+from flask import request, jsonify
+from api.models import User, db
+from api.routes import api_v1  # IMPORT CORRECTO
 
-from flask import request,jsonify
-from api.models import User,db
-from api.routes import api_v1 as api2  # este es tu Blueprint / ivan
-
-
-@api.route('/add/user',methods=['POST'])
+@api_v1.route('/add/user', methods=['POST'])
 def create_user():
     try:
         if not request.is_json:
             return jsonify({"error": "El contenido debe ser application/json"}), 400
-        print(">>> Llegó al endpoint /add/post")
         data = request.get_json()
-        user = User()
-        
-        user.dni = request.json.get('dni')
-        user.full_name = request.json.get('full_name')
-        user.email = request.json.get('email')
-        user.gender = request.json.get('gender')
-        user.age = request.json.get('age')
-        user.address = request.json.get('address')
-        user.phone = request.json.get('phone')
-        user.speciality = request.json.get('speciality')
-        user.role_id = request.json.get('role_id')
 
-        password = data.get('password')
+        user = User(
+            dni=data.get('dni'),
+            full_name=data.get('full_name'),
+            email=data.get('email'),
+            gender=data.get('gender'),
+            age=data.get('age'),
+            address=data.get('address'),
+            phone=data.get('phone'),
+            speciality=data.get('speciality'),
+            role_id=data.get('role_id')
+        )
 
-        user.set_password(password)
-        
+        user.set_password(data.get('password'))
+
         db.session.add(user)
         db.session.commit()
-        return jsonify({'message':'User creado correctamente'})
+
+        return jsonify({'message': 'User creado correctamente'}), 201
+
     except Exception as e:
         return jsonify({'error': 'Error server', 'details': str(e)}), 500
+
 
 
 
