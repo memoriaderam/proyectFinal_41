@@ -1,35 +1,38 @@
 import React from "react";
 import Menu from "../../img/Menu.jpg";
 import { Link } from "react-router-dom";
-import Home from "../pages/home.js";
 
 export const Navbar = () => {
   return (
     <nav className="navbar navbar-fixed-top nav">
       <div className="container-fluid">
-        <a className="navbar-brand" href="/">
+        <Link className="navbar-brand" to="/">
           <h1>Mundo Optico 20/20</h1>
-        </a>
+        </Link>
+
         <a
           className="nav-link"
-          href="https://www.google.co.ve/maps/place/MUNDO+OPTICO+2020/@10.5055061,-66.9002482,17z/data=!3m1!4b1!4m6!3m5!1s0x8c2a593d25221417:0xb28ad4a9d3c259a9!8m2!3d10.5055061!4d-66.9002482!16s%2Fg%2F11fky7qmzc?hl=es&entry=ttu&g_ep=EgoyMDI1MDMyNS4xIKXMDSoJLDEwMjExNDU1SAFQAw%3D%3D"
+          href="https://www.google.co.ve/maps/place/MUNDO+OPTICO+2020/"
           target="_blank"
+          rel="noopener noreferrer"
         >
           <i className="fa-solid fa-location-dot" /> Ubicación{" "}
         </a>
 
         <a
           className="nav-link"
-          href="https://api.whatsapp.com/send?phone=584241394440&fbclid=PAZXh0bgNhZW0CMTEAAaYHvltvGRPTWqshI9XRn7fKpBaHJA49OTtOVY1qpFqQ7IP9h2loWOVVlgs_aem_e2MugYZyve_efZ-UZiQfVg"
+          href="https://api.whatsapp.com/send?phone=584241394440"
           target="_blank"
+          rel="noopener noreferrer"
         >
-          <i className="fa-brands fa-whatsapp" /> Whatapp
+          <i className="fa-brands fa-whatsapp" /> WhatsApp
         </a>
 
         <a
           className="nav-link"
           href="https://www.instagram.com/mundooptico2020/"
           target="_blank"
+          rel="noopener noreferrer"
         >
           <i className="fa-brands fa-square-instagram" /> Instagram
         </a>
@@ -43,7 +46,7 @@ export const Navbar = () => {
           aria-label="Toggle navigation"
         >
           <span>
-            <img src={Menu} />
+            <img src={Menu} alt="Menú" />
           </span>
         </button>
 
@@ -51,9 +54,9 @@ export const Navbar = () => {
           className="offcanvas offcanvas-end text-bg-light"
           tabIndex="-1"
           id="offcanvasDarkNavbar"
-          aria-labelledby="offcanvasDarkNavbarLabel border"
+          aria-labelledby="offcanvasDarkNavbarLabel"
         >
-          <div className="offcanvas-header ">
+          <div className="offcanvas-header">
             <h5 className="offcanvas-title" id="offcanvasDarkNavbarLabel">
               Mundo Optico 20/20
             </h5>
@@ -64,54 +67,66 @@ export const Navbar = () => {
               aria-label="Close"
             ></button>
           </div>
+
           <div className="offcanvas-body">
             <ul className="navbar-nav justify-content-end flex-grow-1 pe-3">
+              {/* Rutas públicas */}
               <li className="nav-item">
-                <a className="nav-link active" aria-current="page" href="/usersAcces">
-                  Agenda tu cita
-                </a>
+                <Link className="nav-link" to="/usersacces">Agenda tu cita</Link>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="/aboutUs">
-                  Acerca de nosotros
-                </a>
+                <Link className="nav-link" to="/aboutUs">Acerca de nosotros</Link>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="/sales">
-                  Monturas
-                </a>
+                <Link className="nav-link" to="/sales">Monturas</Link>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="/crystals">
-                  Cristales
-                </a>
+                <Link className="nav-link" to="/crystals">Cristales</Link>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="/consultations">
-                  Consultas
-                </a>
+                <Link className="nav-link" to="/consultations">Consultas</Link>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="/brands">
-                  Marcas
-                </a>
+                <Link className="nav-link" to="/brands">Marcas</Link>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="/testimony">
-                  Testimonios
-                </a>
+                <Link className="nav-link" to="/usersadmin">Acceso Administrador</Link>
+              </li>
+
+              {/* Secciones privadas o de administración */}
+              <li className="nav-item">
+                <Link className="nav-link" to="/patients">Pacientes</Link>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="/usersadmin">
-                  Acceso Administrador
-                </a>
+                <Link className="nav-link" to="/orders">Pedidos</Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/prescriptions">Recetas</Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/doctors">Doctores</Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/notifications">Notificaciones</Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/comments">Comentarios</Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/stats">Estadísticas</Link>
+              </li>
+
+              {/* Blog */}
+              <li className="nav-item">
+                <Link className="nav-link" to="/posts">Blog</Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/create/post">Crear Post</Link>
               </li>
             </ul>
           </div>
         </div>
       </div>
     </nav>
-
   );
 };
-

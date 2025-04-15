@@ -20,6 +20,7 @@ import { Footer } from "./component/footer";
 import PostList from "./pages/postList";
 import Post from "./pages/post";
 import EditPost from "./pages/editPost";
+import { Login } from "./pages/login";
 
 
 //patients imports
@@ -86,7 +87,7 @@ const Layout = () => {
                         <Route element={<Sales />} path="/sales" />
                         <Route element={<Crystals />} path="/crystals" />
                         <Route element={<Consultations />} path="/consultations" />
-
+                        <Route element={<Login />} path="/login" />
                         <Route element={<h1>Not found!</h1>} />
 
                         // post
