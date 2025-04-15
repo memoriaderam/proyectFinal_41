@@ -28,6 +28,7 @@ class User(db.Model):
     is_active = db.Column(db.Boolean, nullable=False, default=True)
     role_id = db.Column(db.Integer, db.ForeignKey('role.id', name='fk_user_role'), nullable=False)
     create_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
+    reset_token = db.Column(db.String(200), nullable=True)
 
     appointments = db.relationship('Appointment', backref='patient', foreign_keys='Appointment.identity_number', lazy=True)
     prescriptions = db.relationship('Prescription', backref='patient', lazy=True)

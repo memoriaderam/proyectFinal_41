@@ -17,7 +17,7 @@ export const Navbar = () => {
         <div></div>
         <div></div>
         <a
-          class="nav-link"
+          className="nav-link"
           href="https://www.google.co.ve/maps/place/MUNDO+OPTICO+2020/@10.5055061,-66.9002482,17z/data=!3m1!4b1!4m6!3m5!1s0x8c2a593d25221417:0xb28ad4a9d3c259a9!8m2!3d10.5055061!4d-66.9002482!16s%2Fg%2F11fky7qmzc?hl=es&entry=ttu&g_ep=EgoyMDI1MDMyNS4xIKXMDSoJLDEwMjExNDU1SAFQAw%3D%3D"
           target="_blank"
         >
@@ -25,7 +25,7 @@ export const Navbar = () => {
         </a>
 
         <a
-          class="nav-link"
+          className="nav-link"
           href="https://api.whatsapp.com/send?phone=584241394440&fbclid=PAZXh0bgNhZW0CMTEAAaYHvltvGRPTWqshI9XRn7fKpBaHJA49OTtOVY1qpFqQ7IP9h2loWOVVlgs_aem_e2MugYZyve_efZ-UZiQfVg"
           target="_blank"
         >
@@ -33,7 +33,7 @@ export const Navbar = () => {
         </a>
 
         <a
-          class="nav-link"
+          className="nav-link"
           href="https://www.instagram.com/mundooptico2020/"
           target="_blank"
         >
@@ -55,7 +55,7 @@ export const Navbar = () => {
 
         <div
           className="offcanvas offcanvas-end text-bg-dark"
-          tabindex="-1"
+          tabIndex="-1"
           id="offcanvasDarkNavbar"
           aria-labelledby="offcanvasDarkNavbarLabel border"
         >

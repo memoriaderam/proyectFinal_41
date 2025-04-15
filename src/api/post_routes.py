@@ -1,6 +1,6 @@
 from flask import request,jsonify
 from api.models import Post,db
-from api.routes import api  # este es tu Blueprint
+from api.routes import api_v1 as api  # este es tu Blueprint / ivan
 
 # ////Como administrador, quiero agregar nuevos productos al catálogo para mantener la oferta actualizada
 
