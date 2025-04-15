@@ -1,7 +1,7 @@
 import os
 from flask import request,jsonify
 from api.models import Post,db
-from api.routes import api  # este es tu Blueprint
+from api.routes import api_v1 as api  # este es tu Blueprint / ivan
 
 
 

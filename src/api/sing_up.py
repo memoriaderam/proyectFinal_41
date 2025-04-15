@@ -1,7 +1,7 @@
 
 from flask import request,jsonify
 from api.models import User,db
-from api.routes import api  # este es tu Blueprint
+from api.routes import api_v1 as api2  # este es tu Blueprint / ivan
 
 
 @api.route('/add/user',methods=['POST'])

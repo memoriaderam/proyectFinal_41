@@ -11,31 +11,33 @@ from flask import Blueprint
 from flask_cors import CORS
 from api.utils import APIException, generate_sitemap
 from api.models import db
-from api.routes import api
+from api.routes import api_v1  # Ivn
 from api.admin import setup_admin
 from api.commands import setup_commands
 from api.models import Post
-from flask import send_from_directory
-from api.config import Config
-from flask_cors import CORS
 
 # from models import Person
 
 ENV = "development" if os.getenv("FLASK_DEBUG") == "1" else "production"
-static_file_dir = os.path.join(
-    os.path.dirname(os.path.realpath(__file__)), "../public/"
-)
+static_file_dir = os.path.join(os.path.dirname(
+    os.path.realpath(__file__)), '../public/')
 app = Flask(__name__)
-CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}})
-jwt = JWTManager(app)
-
-app.config["JWT_SECRET_KEY"] = "secret-key85"
 app.url_map.strict_slashes = False
-CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}})
 
-app.config.from_object(Config)
+# database condiguration
+db_url = os.getenv("DATABASE_URL")
+if db_url is not None:
+    app.config['SQLALCHEMY_DATABASE_URI'] = db_url.replace(
+        "postgres://", "postgresql://")
+else:
+    app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///db.sqlite"
+
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 MIGRATE = Migrate(app, db, compare_type=True)
 db.init_app(app)
+with app.app_context():
+    create_default_roles()
+    create_default_user()
 
 # Seed roles
 with app.app_context():
@@ -48,17 +50,11 @@ setup_admin(app)
 setup_commands(app)
 
 # Add all endpoints form the API with a "api" prefix
-app.register_blueprint(api, url_prefix="/api")
+app.register_blueprint(api, url_prefix='/api')
 
-
-# Ruta para servir las imágenes desde /uploads/<nombre_archivo>
-@app.route("/uploads/<filename>")
-def uploaded_file(filename):
-    return send_from_directory(os.path.join(os.getcwd(), "uploads"), filename)
 
 
 # Handle/serialize errors like a JSON object
-
 
 @app.errorhandler(APIException)
 def handle_invalid_usage(error):
@@ -66,7 +62,6 @@ def handle_invalid_usage(error):
 
 
 # generate sitemap with all your endpoints
-
 
 @app.route("/")
 def sitemap():
@@ -84,8 +79,9 @@ def serve_any_other_file(path):
     response.cache_control.max_age = 0  # avoid cache memory
     return response
 
-
 # this only runs if `$ python src/main.py` is executed
-if __name__ == "__main__":
-    PORT = int(os.environ.get("PORT", 3001))
-    app.run(host="0.0.0.0", port=PORT, debug=True)
+if __name__ == '__main__':
+    PORT = int(os.environ.get('PORT', 3001))
+    app.run(host='0.0.0.0', port=PORT, debug=True)
+
+

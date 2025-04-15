@@ -32,6 +32,7 @@ class User(db.Model):
         db.Integer, db.ForeignKey("role.id", name="fk_user_role"), nullable=False
     )
     create_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
+    reset_token = db.Column(db.String(200), nullable=True)
 
     # Relaciones con cascade
     appointments = db.relationship(

@@ -46,6 +46,7 @@ const getState = ({ getStore, getActions, setStore }) => ({
 	},
 
 	actions: {
+		// Pacientes
 		loadPatients: async () => {
 			const data = await getPatients();
 			setStore({ patients: data });
@@ -70,6 +71,7 @@ const getState = ({ getStore, getActions, setStore }) => ({
 			getActions().loadPatients();
 		},
 
+		// Órdenes
 		loadOrders: async () => {
 			const data = await getOrders();
 			setStore({ orders: data });
@@ -83,6 +85,7 @@ const getState = ({ getStore, getActions, setStore }) => ({
 			getActions().loadOrders();
 		},
 
+		// Doctores
 		loadDoctors: async () => {
 			const data = await getDoctors();
 			setStore({ doctors: data });
@@ -96,6 +99,7 @@ const getState = ({ getStore, getActions, setStore }) => ({
 			getActions().loadDoctors();
 		},
 
+		// Recetas
 		loadPrescriptions: async () => {
 			const data = await getPrescriptions();
 			setStore({ prescriptions: data });
@@ -120,6 +124,7 @@ const getState = ({ getStore, getActions, setStore }) => ({
 			getActions().loadPrescriptions();
 		},
 
+		// Citas
 		loadAppointments: async () => {
 			const data = await getAppointments();
 			setStore({ appointments: data });
@@ -133,6 +138,7 @@ const getState = ({ getStore, getActions, setStore }) => ({
 			getActions().loadAppointments();
 		},
 
+		// Notificaciones
 		loadNotifications: async () => {
 			const data = await getNotifications();
 			setStore({ notifications: data });
@@ -142,17 +148,20 @@ const getState = ({ getStore, getActions, setStore }) => ({
 			getActions().loadNotifications();
 		},
 
+		// Comentarios
 		loadComments: async () => {
 			const data = await getComments();
 			setStore({ comments: data });
 		},
 
+		// Estadísticas
 		loadStats: async () => {
 			const res = await fetch(`${API_URL}/stats/summary`);
 			const data = await res.json();
 			setStore({ stats: data });
 		},
 
+		// Mensaje de prueba
 		getMessage: async () => {
 			try {
 				const resp = await fetch(`${API_URL}/api/hello`);
@@ -164,13 +173,17 @@ const getState = ({ getStore, getActions, setStore }) => ({
 			}
 		},
 
-		// Función de ejemplo visual
+		// Ejemplo
 		exampleFunction: () => {
 			const store = getStore();
-			const demo = store.demo?.map((elm, i) => ({ ...elm, background: i === 0 ? "green" : elm.background }));
+			const demo = store.demo?.map((elm, i) => ({
+				...elm,
+				background: i === 0 ? "green" : elm.background
+			}));
 			setStore({ demo });
 		},
 
+		// Publicaciones
 		createPost: async (newPost) => {
 			try {
 				const res = await fetch(`${process.env.BACKEND_URL}/api/add/post`, {
@@ -187,7 +200,6 @@ const getState = ({ getStore, getActions, setStore }) => ({
 				return { success: false, error: error.message };
 			}
 		},
-
 		getPost: async () => {
 			try {
 				const res = await fetch(`${process.env.BACKEND_URL}/api/post/list`);
@@ -202,7 +214,6 @@ const getState = ({ getStore, getActions, setStore }) => ({
 				return [];
 			}
 		},
-
 		updatePost: async (postId, updatedData) => {
 			try {
 				const res = await fetch(`${process.env.BACKEND_URL}/api/edit/post/${postId}`, {
@@ -220,7 +231,6 @@ const getState = ({ getStore, getActions, setStore }) => ({
 				return { success: false, error: error.message };
 			}
 		},
-
 		deletePost: async (postId) => {
 			try {
 				const res = await fetch(`${process.env.BACKEND_URL}/api/delete/post/${postId}`, {
@@ -235,6 +245,89 @@ const getState = ({ getStore, getActions, setStore }) => ({
 			} catch (error) {
 				console.error("Error al eliminar post:", error);
 				return { success: false, error: error.message };
+			}
+		},
+
+		// Recuperación de contraseña
+		handleSubmitReset: async (e, email) => {
+			e.preventDefault();
+			console.log("Se ha solicitado la recuperación de contraseña para:", email);
+			const response = await getActions().ResetPassword(email);
+			alert(response ? "Correo enviado exitosamente." : "Hubo un error. Intenta de nuevo.");
+		},
+		ResetPassword: async (email) => {
+			try {
+				const response = await fetch(`${process.env.BACKEND_URL}/api/v1/reset`, {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify({ email })
+				});
+				if (!response.ok) throw new Error("Error en el servidor");
+				const contentType = response.headers.get("content-type");
+				if (!contentType.includes("application/json")) throw new Error("Respuesta no es JSON");
+				const data = await response.json();
+				return data;
+			} catch (error) {
+				console.log("Error al enviar email de recuperación:", error);
+				return false;
+			}
+		},
+		handleNewPassword: async (e, token, password, confirm, navigate, setError) => {
+			try {
+				e.preventDefault();
+				if (!token) return setError("Debes ingresar el token");
+				if (password !== confirm) return setError("Las contraseñas no coinciden");
+				const resp = await fetch(`${process.env.BACKEND_URL}/api/v1/new_password`, {
+					method: "PUT",
+					headers: {
+						"Content-Type": "application/json"
+					},
+					body: JSON.stringify({ token, password })
+				});
+				const data = await resp.json();
+				if (!resp.ok) return setError(data.msg || "Error al restablecer la contraseña");
+				alert("Contraseña actualizada correctamente");
+				navigate("/login");
+			} catch (error) {
+				console.error("Error en handleNewPassword:", error);
+				setError("Hubo un problema, intenta más tarde");
+			}
+		},
+		verifyResetToken: async (token) => {
+			try {
+				const resp = await fetch(`${process.env.BACKEND_URL}/api/v1/new_password`, {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json"
+					},
+					body: JSON.stringify({ token })
+				});
+				if (!resp.ok) {
+					const error = await resp.json();
+					return { valid: false, message: error.msg };
+				}
+				const data = await resp.json();
+				return { valid: true, message: data.msg };
+			} catch (error) {
+				return { valid: false, message: "Error del servidor" };
+			}
+		},
+
+		cancelarCita: async (event_uri, email) => {
+			try {
+				const resp = await fetch(`http://localhost:3001/api/v1/calendly/cancel`, {
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify({ event_uri, email })
+				});
+				const data = await resp.json();
+				alert(resp.ok ? "Cita cancelada correctamente" : data.msg || "Error al cancelar cita");
+				return data;
+			} catch (error) {
+				alert("Error del servidor al cancelar cita");
+				console.error("Error al cancelar cita:", error);
 			}
 		}
 	}
