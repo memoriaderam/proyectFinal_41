@@ -71,7 +71,9 @@ dist/*
 !.gitkeep
 !.htaccess
 !.eslintrc
-!.env.example
+.env.*
+.env
+.env.example
 .now
 
 # backend stuff
