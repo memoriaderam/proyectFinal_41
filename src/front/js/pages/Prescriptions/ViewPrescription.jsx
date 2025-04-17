@@ -1,3 +1,4 @@
+
 import React, { useEffect, useRef, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { getPrescriptionById, downloadPrescriptionPDF } from "../../services/prescriptionService";
@@ -16,7 +17,7 @@ export const ViewPrescription = () => {
     const { id } = useParams();
     const { store, actions } = useContext(Context);
     const [prescription, setPrescription] = useState(null);
-    const componentRef = useRef(null); // ✅ useRef correcto
+    const componentRef = useRef(null);
 
     useEffect(() => {
         actions.loadPatients();
@@ -28,13 +29,13 @@ export const ViewPrescription = () => {
     const isSevereMyopia = (sph) => parseFloat(sph) <= -4;
 
     const getPatientName = () => {
-        const patient = store.patients.find(p => p.identity_number === prescription?.identity_number);
+        const patient = store.patients.find(p => p.dni === prescription?.dni);
         return patient ? patient.full_name : null;
     };
 
     const handlePrint = useReactToPrint({
-        contentRef: componentRef, // ✅ uso correcto para react-to-print@3.0.0
-        documentTitle: `receta_${prescription?.prescrip_id || "sin_id"}`,
+        contentRef: componentRef,
+        documentTitle: `receta_${prescription?.id || "sin_id"}`,
         onAfterPrint: () => toast.success("Impresión completa"),
         onPrintError: () => toast.error("Error al imprimir")
     });
@@ -49,21 +50,19 @@ export const ViewPrescription = () => {
                 <Button variant="info" onClick={handlePrint} className="me-2">
                     <FaPrint /> Imprimir
                 </Button>
-
-                <Button variant="secondary" onClick={() => downloadPrescriptionPDF(prescription.prescrip_id)}>
+                <Button variant="secondary" onClick={() => downloadPrescriptionPDF(prescription.id)}>
                     📄 Descargar PDF
                 </Button>
             </div>
 
-            {/* ✅ ref debe estar en un nodo HTML real */}
             <div ref={componentRef}>
                 <Card className="shadow-sm">
                     <Card.Body>
                         <Row className="mb-3">
-                            <Col md={4}><strong>ID:</strong> {prescription.prescrip_id}</Col>
+                            <Col md={4}><strong>ID:</strong> {prescription.id}</Col>
                             <Col md={4}>
                                 <FaUser className="me-2" />
-                                <strong>Paciente:</strong> {prescription.identity_number}
+                                <strong>Paciente:</strong> {prescription.dni}
                                 {getPatientName() && ` - ${getPatientName()}`}
                             </Col>
                             <Col md={4}>

@@ -6,7 +6,7 @@ export const getAppointments = async () => {
 };
 
 export const createAppointment = async (data) => {
-    const res = await fetch(`${API_URL}/appointments`, {
+    const res = await fetch(`${API_URL}/api/appointments`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
@@ -15,7 +15,7 @@ export const createAppointment = async (data) => {
 };
 
 export const updateAppointment = async (id, data) => {
-    const res = await fetch(`${API_URL}/appointments/${id}`, {
+    const res = await fetch(`${API_URL}/api/appointments/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),

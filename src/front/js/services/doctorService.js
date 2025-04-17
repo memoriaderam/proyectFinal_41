@@ -1,12 +1,12 @@
 import { API_URL } from "./api";
 
 export const getDoctors = async () => {
-    const res = await fetch(`${API_URL}/doctors`);
+    const res = await fetch(`${API_URL}/api/doctors`);
     return res.json();
 };
 
 export const createDoctor = async (data) => {
-    const res = await fetch(`${API_URL}/doctors`, {
+    const res = await fetch(`${API_URL}/api/doctors`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
@@ -15,7 +15,7 @@ export const createDoctor = async (data) => {
 };
 
 export const updateDoctor = async (id, data) => {
-    const res = await fetch(`${API_URL}/doctors/${id}`, {
+    const res = await fetch(`${API_URL}/api/doctors/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
@@ -24,6 +24,6 @@ export const updateDoctor = async (id, data) => {
 };
 
 export const deleteDoctor = async (id) => {
-    const res = await fetch(`${API_URL}/doctors/${id}`, { method: "DELETE" });
+    const res = await fetch(`${API_URL}/api/doctors/${id}`, { method: "DELETE" });
     return res.json();
 };

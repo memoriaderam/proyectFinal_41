@@ -156,7 +156,7 @@ const getState = ({ getStore, getActions, setStore }) => ({
 
 		// Estadísticas
 		loadStats: async () => {
-			const res = await fetch(`${API_URL}/stats/summary`);
+			const res = await fetch(`${API_URL}/api/stats/summary`);
 			const data = await res.json();
 			setStore({ stats: data });
 		},
@@ -186,9 +186,9 @@ const getState = ({ getStore, getActions, setStore }) => ({
 		// Publicaciones
 		createPost: async (newPost) => {
 			try {
-				const res = await fetch(`${process.env.BACKEND_URL}/api/add/post`, {
+				const res = await fetch(`${process.env.BACKEND_URL}/api/posts`, {
 					method: "POST",
-					body: newPost
+					body: newPost // debe ser FormData
 				});
 				if (!res.ok) {
 					const errorText = await res.text();
@@ -200,9 +200,10 @@ const getState = ({ getStore, getActions, setStore }) => ({
 				return { success: false, error: error.message };
 			}
 		},
+
 		getPost: async () => {
 			try {
-				const res = await fetch(`${process.env.BACKEND_URL}/api/post/list`);
+				const res = await fetch(`${process.env.BACKEND_URL}/api/posts`);
 				if (!res.ok) {
 					const errorText = await res.text();
 					throw new Error(errorText || "Error al obtener posts");
@@ -214,11 +215,12 @@ const getState = ({ getStore, getActions, setStore }) => ({
 				return [];
 			}
 		},
+
 		updatePost: async (postId, updatedData) => {
 			try {
-				const res = await fetch(`${process.env.BACKEND_URL}/api/edit/post/${postId}`, {
+				const res = await fetch(`${process.env.BACKEND_URL}/api/posts/${postId}`, {
 					method: "PUT",
-					body: updatedData
+					body: updatedData // también debe ser FormData
 				});
 				if (!res.ok) {
 					const text = await res.text();
@@ -231,9 +233,10 @@ const getState = ({ getStore, getActions, setStore }) => ({
 				return { success: false, error: error.message };
 			}
 		},
+
 		deletePost: async (postId) => {
 			try {
-				const res = await fetch(`${process.env.BACKEND_URL}/api/delete/post/${postId}`, {
+				const res = await fetch(`${process.env.BACKEND_URL}/api/posts/${postId}`, {
 					method: "DELETE"
 				});
 				if (!res.ok) {

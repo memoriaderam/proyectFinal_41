@@ -2,7 +2,7 @@ import { API_URL } from "./api";
 
 export const getOrders = async () => {
     try {
-        const res = await fetch(`${API_URL}/orders`);
+        const res = await fetch(`${API_URL}/api/orders`);
         if (!res.ok) throw await res.json();
         return await res.json();
     } catch (error) {
@@ -12,7 +12,7 @@ export const getOrders = async () => {
 
 export const getOrderById = async (id) => {
     try {
-        const res = await fetch(`${API_URL}/orders/${id}`);
+        const res = await fetch(`${API_URL}/api/orders/${id}`);
         if (!res.ok) throw await res.json();
         return await res.json();
     } catch (error) {
@@ -22,7 +22,7 @@ export const getOrderById = async (id) => {
 
 export const createOrder = async (data) => {
     try {
-        const res = await fetch(`${API_URL}/orders`, {
+        const res = await fetch(`${API_URL}/api/orders`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(data),
@@ -35,7 +35,7 @@ export const createOrder = async (data) => {
 
 export const updateOrder = async (id, data) => {
     try {
-        const res = await fetch(`${API_URL}/orders/${id}`, {
+        const res = await fetch(`${API_URL}/api/orders/${id}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(data),

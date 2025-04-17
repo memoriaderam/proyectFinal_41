@@ -19,7 +19,8 @@ from api.notification_routes import register_notification_routes
 from api.stats_routes import register_stats_routes
 from api.reset_routes import register_reset_routes
 from api.calendly_routes import register_calendly_routes
-
+from api.post_routes import register_post_routes
+from api.serve_uploads_routes import register_serve_uploads_routes
 # ---------- Inicialización ----------
 load_dotenv()
 api = Blueprint("api", __name__)
@@ -35,6 +36,9 @@ register_notification_routes(api)
 register_stats_routes(api)
 register_reset_routes(api)
 register_calendly_routes(api)
+register_post_routes(api)
+register_serve_uploads_routes(api)
+
 
 # ---------- Ruta de prueba ----------
 from flask import jsonify
