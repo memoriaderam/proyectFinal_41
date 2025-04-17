@@ -59,7 +59,11 @@ const postList = () => {
                                 {/* Imagen Miniatura */}
                                 <div className="col-md-4 d-flex align-items-center justify-content-center">
                                     <img
-                                        src={`${process.env.BACKEND_URL}/${post.image_url}`}
+                                        src={
+                                            post.image_url
+                                                ? `${process.env.BACKEND_URL}/api/${post.image_url.split("/").pop()}`
+                                                : "https://via.placeholder.com/150?text=Sin+imagen"
+                                        }
                                         alt={post.article}
                                         className="img-thumbnail"
                                         style={{ height: "150px", objectFit: "cover" }}

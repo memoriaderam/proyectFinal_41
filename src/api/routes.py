@@ -19,11 +19,21 @@ from api.notification_routes import register_notification_routes
 from api.stats_routes import register_stats_routes
 from api.dashboard_functions import register_dashboard_funtions
 from api.calendly_routes import register_calendly_routes
+from api.sing_up import register_user_routes
+from api.login import register_login_route
+
+from api.post_routes import register_post_routes
+from api.serve_uploads_routes import register_serve_uploads_routes
 
 # ---------- Inicialización ----------
 load_dotenv()
 api = Blueprint("api", __name__)
-CORS(api, origins=["http://localhost:3000"], supports_credentials=True, allow_headers=["Content-Type", "Authorization"])
+CORS(
+    api,
+    origins=["http://localhost:3000"],
+    supports_credentials=True,
+    allow_headers=["Content-Type", "Authorization"],
+)
 
 register_patient_routes(api)
 register_order_routes(api)
@@ -35,9 +45,15 @@ register_notification_routes(api)
 register_stats_routes(api)
 register_dashboard_funtions(api)
 register_calendly_routes(api)
+register_user_routes(api)
+register_login_route(api)
+register_post_routes(api)
+register_serve_uploads_routes(api)
+
 
 # ---------- Ruta de prueba ----------
 from flask import jsonify
+
 
 @api.route("/hello", methods=["POST", "GET"])
 def handle_hello():

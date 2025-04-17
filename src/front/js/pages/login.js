@@ -1,5 +1,8 @@
 import React, { useState, useRef } from "react";
+import { useContext } from "react";
+import { Context } from "../store/appContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useNavigate } from "react-router-dom";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import "../../styles/form.css";
 
@@ -9,15 +12,25 @@ export const Login = ({ register }) => {
     const [showPassword, setShowPassword] = useState(false);
 
     const formRef = useRef();
+    const { actions } = useContext(Context);
+    const navigate = useNavigate();
 
-    const handleSubmit = (e) => {   //Esta funcion la puedes pasar al actions.
+    const handleSubmit = async (e) => {
         e.preventDefault();
-
-        const loginData = inputValue.includes("@")
-            ? { email: inputValue, password }
-            : { username: inputValue, password };
-
-        console.log("Datos para login:", loginData);
+    
+        const loginData = {
+            email: inputValue,
+            password
+        };
+    
+        const result = await actions.loginUser(loginData);
+    
+        if (result.success) {
+            console.log("✅ Login exitoso");
+            navigate("/");
+        } else {
+            alert("❌ " + result.error);
+        }
     };
 
     return (

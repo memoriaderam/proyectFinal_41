@@ -73,6 +73,8 @@ class PostSchema(SQLAlchemySchema):
     offers = auto_field()
     article = auto_field()
     doctor_id = auto_field()
+    image_url = auto_field()
+
 
 
 # Receta óptica emitida a un paciente
