@@ -2,7 +2,7 @@ import { API_URL } from "./api";
 
 export const getPatients = async () => {
     try {
-        const res = await fetch(`${API_URL}/patients`);
+        const res = await fetch(`${API_URL}/api/patients`);
         if (!res.ok) throw await res.json();
         return await res.json();
     } catch (error) {
@@ -13,7 +13,7 @@ export const getPatients = async () => {
 
 export const getPatientById = async (id) => {
     try {
-        const res = await fetch(`${API_URL}/patients/${id}`);
+        const res = await fetch(`${API_URL}/api/patients/${id}`);
         if (!res.ok) throw await res.json();
         return await res.json();
     } catch (error) {
@@ -23,7 +23,7 @@ export const getPatientById = async (id) => {
 
 export const createPatient = async (patientData) => {
     try {
-        const res = await fetch(`${API_URL}/patients`, {
+        const res = await fetch(`${API_URL}/api/patients`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(patientData)
@@ -36,7 +36,7 @@ export const createPatient = async (patientData) => {
 
 export const updatePatient = async (id, updatedData) => {
     try {
-        const res = await fetch(`${API_URL}/patients/${id}`, {
+        const res = await fetch(`${API_URL}/api/patients/${id}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(updatedData)
@@ -49,7 +49,7 @@ export const updatePatient = async (id, updatedData) => {
 
 export const deletePatient = async (id) => {
     try {
-        const res = await fetch(`${API_URL}/patients/${id}`, {
+        const res = await fetch(`${API_URL}/api/patients/${id}`, {
             method: "DELETE"
         });
         if (!res.ok) throw await res.json();

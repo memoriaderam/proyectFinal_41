@@ -1,7 +1,69 @@
-// src/front/js/component/navbar.js
 import React from "react";
 import Menu from "../../img/Menu.jpg";
 import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faHouse,
+  faCircleInfo,
+  faTags,
+  faGlasses,
+  faSearch,
+  faStethoscope,
+  faCalendarPlus,
+  faNewspaper,
+  faPenToSquare,
+  faRightToBracket,
+  faUserPlus,
+  faKey,
+  faLock,
+  faUserShield,
+  faUserInjured,
+  faBoxOpen,
+  faCartPlus,
+  faFilePrescription,
+  faPrescriptionBottle,
+  faUserDoctor,
+  faBell,
+  faComments,
+  faChartBar,
+  faTachometerAlt,
+  faUser,
+  faClipboardList,
+  faCalendarCheck,
+  faCalendarDays
+} from "@fortawesome/free-solid-svg-icons";
+
+const menuItems = [
+  ["Inicio", "/", faHouse],
+  ["Acerca de Nosotros", "/aboutUs", faCircleInfo],
+  ["Marcas", "/brands", faTags],
+  ["Monturas", "/sales", faGlasses],
+  ["Cristales", "/crystals", faSearch],
+  ["Consultas", "/consultations", faStethoscope],
+  ["Agendar Cita", "/usersacces", null], //faCalendarPlus
+  ["Blog", "/posts", faNewspaper],
+  ["Crear Post", "/create/post", faPenToSquare],
+  ["Iniciar Sesión", "/login", null], //faRightToBracket
+  ["Registrarse", "/register", null], //faUserPlus
+  ["Recuperar Contraseña", "/reset", faKey],
+  ["Nueva Contraseña", "/new_password", null], //faLock
+  ["Acceso Administrador", "/usersadmin", null], //faUserShield
+  ["Pacientes", "/patients", faUserInjured],
+  //["Nuevo Paciente", "/patients/new", faUserPlus],
+  ["Pedidos", "/orders", faBoxOpen],
+  //["Nuevo Pedido", "/orders/new", faCartPlus],
+  ["Recetas", "/prescriptions", faFilePrescription],
+  //["Nueva Receta", "/prescriptions/new", faPrescriptionBottle],
+  ["Doctores", "/doctors", null], //faUserDoctor
+  ["Notificaciones", "/notifications", null], //faBell
+  ["Comentarios", "/comments", null], //faComments
+  ["Estadísticas", "/stats", faChartBar],
+  ["Dashboard", "/dashboard", null], //faTachometerAlt
+  ["Perfil", "/dashboard/profile", null], //faUser
+  ["Pedidos Dashboard", "/dashboard/orders", null], //faClipboardList
+  ["Citas", "/dashboard/appointments", null], //faCalendarCheck
+  ["Agenda", "/dashboard/schedule", null] //faCalendarDays
+];
 
 export const Navbar = () => {
   return (
@@ -35,54 +97,13 @@ export const Navbar = () => {
 
           <div className="offcanvas-body">
             <ul className="navbar-nav justify-content-end flex-grow-1 pe-3">
-
-              {/* Rutas públicas */}
-              <li className="nav-item"><Link className="nav-link" to="/">Inicio</Link></li>
-              <li className="nav-item"><Link className="nav-link" to="/aboutUs">Acerca de Nosotros</Link></li>
-              <li className="nav-item"><Link className="nav-link" to="/brands">Marcas</Link></li>
-              <li className="nav-item"><Link className="nav-link" to="/sales">Monturas</Link></li>
-              <li className="nav-item"><Link className="nav-link" to="/crystals">Cristales</Link></li>
-              <li className="nav-item"><Link className="nav-link" to="/consultations">Consultas</Link></li>
-              <li className="nav-item"><Link className="nav-link" to="/usersacces">Agendar Cita</Link></li>
-
-              {/* Blog */}
-              <li className="nav-item"><Link className="nav-link" to="/posts">Blog</Link></li>
-              <li className="nav-item"><Link className="nav-link" to="/create/post">Crear Post</Link></li>
-
-              {/* Autenticación */}
-              <li className="nav-item"><Link className="nav-link" to="/login">Iniciar Sesión</Link></li>
-              <li className="nav-item"><Link className="nav-link" to="/register">Registrarse</Link></li>
-              <li className="nav-item"><Link className="nav-link" to="/reset">Recuperar Contraseña</Link></li>
-              <li className="nav-item"><Link className="nav-link" to="/new_password">Nueva Contraseña</Link></li>
-
-              {/* Administrador */}
-              <li className="nav-item"><Link className="nav-link" to="/usersadmin">Acceso Administrador</Link></li>
-
-              {/* Gestión de Pacientes */}
-              <li className="nav-item"><Link className="nav-link" to="/patients">Pacientes</Link></li>
-              <li className="nav-item"><Link className="nav-link" to="/patients/new">Nuevo Paciente</Link></li>
-
-              {/* Gestión de Pedidos */}
-              <li className="nav-item"><Link className="nav-link" to="/orders">Pedidos</Link></li>
-              <li className="nav-item"><Link className="nav-link" to="/orders/new">Nuevo Pedido</Link></li>
-
-              {/* Gestión de Recetas */}
-              <li className="nav-item"><Link className="nav-link" to="/prescriptions">Recetas</Link></li>
-              <li className="nav-item"><Link className="nav-link" to="/prescriptions/new">Nueva Receta</Link></li>
-
-              {/* Otras secciones */}
-              <li className="nav-item"><Link className="nav-link" to="/doctors">Doctores</Link></li>
-              <li className="nav-item"><Link className="nav-link" to="/notifications">Notificaciones</Link></li>
-              <li className="nav-item"><Link className="nav-link" to="/comments">Comentarios</Link></li>
-              <li className="nav-item"><Link className="nav-link" to="/stats">Estadísticas</Link></li>
-
-              {/* Dashboard */}
-              <li className="nav-item"><Link className="nav-link" to="/dashboard">Dashboard</Link></li>
-              <li className="nav-item"><Link className="nav-link" to="/dashboard/profile">Perfil</Link></li>
-              <li className="nav-item"><Link className="nav-link" to="/dashboard/orders">Pedidos Dashboard</Link></li>
-              <li className="nav-item"><Link className="nav-link" to="/dashboard/appointments">Citas</Link></li>
-              <li className="nav-item"><Link className="nav-link" to="/dashboard/schedule">Agenda</Link></li>
-
+              {menuItems.map(([label, path, icon]) => (
+                <li className="nav-item" key={path}>
+                  <Link className="nav-link d-flex justify-content-between align-items-center" to={path}>
+                    {label} <FontAwesomeIcon icon={icon} />
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
         </div>

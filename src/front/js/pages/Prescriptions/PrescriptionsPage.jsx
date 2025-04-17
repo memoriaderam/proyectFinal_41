@@ -1,4 +1,4 @@
-// src/pages/PrescriptionsPage.jsx
+
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getPrescriptions } from "../../services/prescriptionService";
@@ -32,8 +32,8 @@ export const PrescriptionsPage = () => {
             <hr />
             <PrescriptionTable
                 prescriptions={prescriptions}
-                onView={(p) => navigate(`/prescriptions/${p.prescrip_id}`)}
-                onEdit={(p) => navigate(`/prescriptions/${p.prescrip_id}/edit`)}
+                onView={(p) => navigate(`/prescriptions/${p.id}`)}
+                onEdit={(p) => navigate(`/prescriptions/${p.id}/edit`)}
             />
         </div>
     );
