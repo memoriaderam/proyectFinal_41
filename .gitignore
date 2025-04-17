@@ -88,3 +88,4 @@ migrations/
 
 # Ignorar carpeta instance
 instance/
+uploads/
