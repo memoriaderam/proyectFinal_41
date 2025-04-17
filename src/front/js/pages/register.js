@@ -1,5 +1,7 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useContext } from "react";
+import { Context } from "../store/appContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useNavigate } from "react-router-dom";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import "../../styles/form.css";
 
@@ -7,6 +9,8 @@ export const Register = ({ create }) => {
     const formRef = useRef();
     const [showPassword, setShowPassword] = useState(false);
     const [passwordStrength, setPasswordStrength] = useState("");
+    const navigate = useNavigate();
+    const { actions } = useContext(Context);
 
     const [data, setData] = useState({
         id: 0,
@@ -18,8 +22,23 @@ export const Register = ({ create }) => {
         age: 0,
         address: "",
         phone: "",
-        specialty: "",
+        speciality: "",
+        role_id: 1
     });
+    
+
+    const handleSubmit = async (e) => {
+    e.preventDefault();
+    const result = await actions.createUser(data);
+
+    if (result.success) {
+        console.log("✅ Usuario creado correctamente");
+        formRef.current.reset(); // limpia el formulario si quieres
+        navigate("/login"); // redirige al login
+    } else {
+        console.error("❌ Error:", result.error);
+    }
+};
 
     const handleChange = (e) => {  //Estas funciones las puedes pasar al actions
         const { name, value } = e.target;
@@ -36,11 +55,7 @@ export const Register = ({ create }) => {
         return "Medium";
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log("Registrando usuario:", data);
-    };
-
+    
     return (
         <div className="container mt-4">
             <div className="title text-center">
@@ -74,7 +89,7 @@ export const Register = ({ create }) => {
                     </div>
                     <div>
                         <label>Especialidad: <span className="required">*</span></label>
-                        <select className="form-input" name="specialty" value={data.specialty} onChange={handleChange} required>
+                        <select className="form-input" name="speciality" value={data.speciality} onChange={handleChange} required>
                             <option value="Patient">Paciente</option>
                             <option value="Ophthalmologist">Oftalmólogo</option>
                             <option value="Optometrist">Optometrista</option>

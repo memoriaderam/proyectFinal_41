@@ -19,6 +19,8 @@ from api.notification_routes import register_notification_routes
 from api.stats_routes import register_stats_routes
 from api.reset_routes import register_reset_routes
 from api.calendly_routes import register_calendly_routes
+from api.sing_up import register_user_routes
+from api.login import register_login_route
 
 # ---------- Inicialización ----------
 load_dotenv()
@@ -35,6 +37,8 @@ register_notification_routes(api)
 register_stats_routes(api)
 register_reset_routes(api)
 register_calendly_routes(api)
+register_user_routes(api)
+register_login_route(api)
 
 # ---------- Ruta de prueba ----------
 from flask import jsonify

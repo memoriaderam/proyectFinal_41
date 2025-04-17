@@ -5,7 +5,6 @@ from api.routes import api_v1 as api  # este es tu Blueprint / ivan
 
 
 
-
 @api.route('/post/list',methods=['GET'])
 def get_post():
     try:

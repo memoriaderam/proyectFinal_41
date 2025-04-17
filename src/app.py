@@ -32,12 +32,13 @@ CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}})
 app.config.from_object(Config)
 MIGRATE = Migrate(app, db, compare_type=True)
 db.init_app(app)
+jwt = JWTManager(app)
 
 
 # Seed roles
-with app.app_context():
-   create_default_roles()
-   create_default_user()
+# with app.app_context():
+#    create_default_roles()
+#    create_default_user()
 
 
 # add the admin
