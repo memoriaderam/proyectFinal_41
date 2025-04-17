@@ -48,17 +48,27 @@ const getState = ({ getStore, getActions, setStore }) => ({
 	actions: {
 		loginUser: async (credentials) => {
 			try {
-				const res = await createPatient(patient);
+				const res = await fetch("http://127.0.0.1:3001/api/login", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json"
+					},
+					body: JSON.stringify(credentials)
+				});
+
+				const data = await res.json();
+
 				if (!res.ok) {
-					const errorData = await res.json().catch(() => ({}));
-					const message = errorData.message || "Error al crear paciente";
-					throw new Error(message);
+					throw new Error(data.message || "Credenciales incorrectas");
 				}
-				await getActions().loadPatients();
-				return true;
-			} catch (err) {
-				console.error("[createPatient error]", err);
-				throw err;
+
+				localStorage.setItem("access_token", data.access_token);
+
+				return { success: true, token: data.access_token };
+
+			} catch (error) {
+				console.error("Error en login:", error.message);
+				return { success: false, error: error.message };
 			}
 		},
 		deletePatient: async (id) => {

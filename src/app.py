@@ -37,9 +37,9 @@ jwt = JWTManager(app)
 
 
 # Seed roles
-# with app.app_context():
-#    create_default_roles()
-#    create_default_user()
+with app.app_context():
+    create_default_roles()
+    create_default_user()
 
 
 # add the admin
