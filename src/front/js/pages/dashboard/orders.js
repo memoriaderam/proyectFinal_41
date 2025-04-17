@@ -12,7 +12,7 @@ export const Orders = () => {
 
     useEffect(() => {
         if (store.user?.DNI) {
-            actions.loadOrders();
+            actions.loadDashboardOrders();
         }
     }, [store.user?.DNI]);
 
