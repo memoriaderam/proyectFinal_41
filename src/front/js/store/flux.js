@@ -31,6 +31,11 @@ import {
 	getComments
 } from "../services/commentService";
 import { API_URL } from "../services/api";
+import { toast } from 'react-toastify';
+import { New_Password } from "../pages/new_password";
+import { faL } from "@fortawesome/free-solid-svg-icons";
+import React from "react";
+import { Clock, CheckCircle, ArchiveRestore, BadgeCheck } from "lucide-react";
 
 const getState = ({ getStore, getActions, setStore }) => ({
 	store: {
@@ -42,7 +47,16 @@ const getState = ({ getStore, getActions, setStore }) => ({
 		notifications: [],
 		comments: [],
 		stats: {},
-		message: null
+		message: null,
+		user: {
+			email: "ivanroman1498@gmail.com",
+			DNI: "2233445566"
+		},
+		userData: null,
+		userLoading: true,
+		userError: null,
+		loadingAppointments: false,
+		cancelingAppointment: null,
 	},
 
 	actions: {
@@ -247,94 +261,205 @@ const getState = ({ getStore, getActions, setStore }) => ({
 				return { success: false, error: error.message };
 			}
 		},
-
-		//Parte: Ivan
-		handleSubmitReset: async (e, email) => {
+		// Reestablecer Contraseña
+		// Parte: Ivan Listo
+		submitReset: async (e, email) => {
 			e.preventDefault();
-			console.log("Se ha solicitado la recuperación de contraseña para el siguiente correo:", email);
-			const response = await getActions().ResetPassword(email);
-			if (response) {
-				alert("Correo enviado exitosamente.");
+			const response = await getActions().resetPassword(email);
+			if (response.success) {
+				toast.success(response.message);
 			} else {
-				alert("Hubo un error. Intenta de nuevo.");
+				toast.error(response.message);
 			}
 		},
-		ResetPassword: async (email) => {
-			console.log(`${API_URL} reset passwword`);
+		resetPassword: async (email) => {
 			try {
-				const response = await fetch(`${API_URL}/reset`, {
+				const response = await fetch(`${API_URL}/api/reset`, {
 					method: "POST",
 					headers: { "Content-Type": "application/json" },
 					body: JSON.stringify({ email })
 				});
 				const data = await response.json();
-				if (!response.ok) throw new Error(data?.msg || "Error en el servidor");
-				return data;
+				return {
+					success: response.ok,
+					message: data?.msg || "Error en el servidor"
+				};
 			} catch (error) {
-				console.log("Error al enviar email de recuperación:", error);
-				return false;
+				return {
+					success: false,
+					message: "Error al enviar el correo de recuperación de contraseña"
+				};
 			}
 		},
-		handleNewPassword: async (e, token, password, confirm, navigate, setError) => {
+		newPassword: async (e, token, password, confirm, navigate) => {
 			try {
 				e.preventDefault();
-				if (!token) return setError("Debes ingresar el token");
-				if (password !== confirm) return setError("Las contraseñas no coinciden");
-
-				const resp = await fetch(`${API_URL}/new_password`, {
+				if (!token) return toast.error("Debes ingresar el token");
+				if (password !== confirm) return toast.error("Las contraseñas no coinciden");
+				const response = await fetch(`${API_URL}/api/new_password`, {
 					method: "PUT",
 					headers: { "Content-Type": "application/json" },
 					body: JSON.stringify({ token, password })
 				});
-				const data = await resp.json();
-				if (!resp.ok) return setError(data?.msg || "Error al restablecer la contraseña");
-
-				alert("Contraseña actualizada correctamente");
+				const data = await response.json();
+				if (!response.ok) return toast.error(data?.msg || "Error al restablecer la contraseña");
+				toast.success("Contraseña actualizada correctamente");
 				navigate("/login");
 			} catch (error) {
-				console.error("Error en handleNewPassword:", error);
-				setError("Hubo un problema, intenta más tarde");
+				console.log("Error al cambiar la contraseña, debido a:", error);
+				toast.error("Hubo un problema al cambiar la contraseña, intenta más tarde");
 			}
 		},
-		verifyResetToken: async (token) => {
+		submitToken: async (e, token, password, confirm, navigate) => {
+			e.preventDefault();
+			if (!token) {
+				toast.error("Por favor ingresa el token.");
+				return;
+			}
+			if (password !== confirm) {
+				toast.error("Las contraseñas no coinciden.");
+				return;
+			}
+			getActions().newPassword(e, token, password, confirm, navigate);
+		},
+		verifyToken: async (token) => {
 			try {
-				const resp = await fetch(`${process.env.BACKEND_URL}/api/v1/new_password`, {
+				const response = await fetch(`${process.env.BACKEND_URL}/api/new_password`, {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json"
 					},
 					body: JSON.stringify({ token })
 				});
-				if (!resp.ok) {
-					const error = await resp.json();
-					console.error("Token inválido o expirado:", error.msg);
-					return { valid: false, message: error.msg };
+				const data = await response.json();
+				if (!response.ok) {
+					toast.error(data?.msg || "Token inválido o expirado");
+					return { valid: false, message: data.msg };
 				}
-				const data = await resp.json();
-				console.log("Token válido:", data.msg);
+				toast.success(data?.msg || "Token válido");
 				return { valid: true, message: data.msg };
 			} catch (error) {
-				console.error("Error al verificar token:", error);
+				toast.error("Error del servidor al verificar el token");
 				return { valid: false, message: "Error del servidor" };
 			}
 		},
-		cancelarCita: async (event_uri, email) => {
+		cancelAppointment: async (event_uri, email) => {
 			try {
-				const resp = await fetch(`${API_URL}/calendly/cancel`, {
+				const response = await fetch(`${API_URL}/api/calendly/cancel`, {
 					method: "POST",
 					headers: { "Content-Type": "application/json" },
 					body: JSON.stringify({ event_uri, email })
 				});
-				const data = await resp.json();
-				if (!resp.ok) alert(data.msg || "Error al cancelar cita");
-				else alert("Cita cancelada correctamente");
+				const data = await response.json();
+				if (!response.ok) {
+					toast.error(data?.msg || "Error al cancelar cita");
+				} else {
+					toast.success("Cita cancelada correctamente");
+				}
 				return data;
 			} catch (error) {
-				console.error("Error al cancelar cita:", error);
-				alert("Error del servidor al cancelar cita");
+				toast.error("Error del servidor al cancelar cita");
+				return { error: true, msg: "Error del servidor" };
 			}
-		}
-
+		},
+		getAppointments: async (email) => {
+			try {
+				const response = await fetch(`${API_URL}/api/calendly/appointments?email=${email}`);
+				const data = await response.json();
+				if (!response.ok) {
+					toast.error(data.msg || "Error al obtener las citas");
+					return [];
+				}
+				return data.items || [];
+			} catch (error) {
+				toast.error("Error de conexión con el servidor");
+				return [];
+			}
+		},
+		loadAppointments: async () => {
+			const store = getStore();
+			if (!store.user?.email) return;
+			setStore({ loadingAppointments: true });
+			const data = await getActions().getAppointments(store.user.email);
+			setStore({ appointments: data, loadingAppointments: false });
+		},
+		cancelandloadAppointments: async (event_uri) => {
+			const store = getStore();
+			setStore({ cancelingAppointment: event_uri });
+			await getActions().cancelAppointment(event_uri, store.user.email);
+			await getActions().loadAppointments();
+			setStore({ cancelingAppointment: null });
+		},
+		cancelButton: (status, canceling) => {
+			if (status === "canceled") return "canceled";
+			if (canceling) return "canceling";
+			return "active";
+		},
+		loadOrders: async () => {
+			const dni = getStore().user?.DNI;
+			if (!dni) {
+				toast.error("Debes proporcionar un DNI.");
+				setStore({ orders: [] });
+				return;
+			}
+			setStore({ ordersLoading: true });
+			try {
+				const response = await fetch(`http://localhost:3001/api/get_orders?dni=${dni}`);
+				const data = await response.json();
+				if (!response.ok) {
+					toast.error(data.msg || "Error al obtener los pedidos");
+					setStore({ orders: [] });
+				} else {
+					setStore({ orders: data.orders || [] });
+					toast.success("Pedidos cargados exitosamente.");
+				}
+			} catch (error) {
+				toast.error("Error de conexión con el servidor");
+				setStore({ orders: [] });
+			}
+			setStore({ ordersLoading: false });
+		},
+		getStatus: (status = "") => {
+			const info = status.trim().toLowerCase();
+			switch (info) {
+				case "pedido":
+					return { label: "Pedido", icon: <Package size={18} className="inline-block mr-1" /> };
+				case "en proceso":
+					return { label: "En Proceso", icon: <Clock size={18} className="inline-block mr-1" /> };
+				case "listo para retirar":
+					return { label: "Listo para Retirar", icon: <ArchiveRestore size={18} className="inline-block mr-1" /> };
+				case "entregado":
+					return { label: "Entregado", icon: <CheckCircle size={18} className="inline-block mr-1 text-green-600" /> };
+				default:
+					return { label: "Desconocido", icon: <BadgeCheck size={18} className="inline-block mr-1 text-gray-500" /> };
+			}
+		},
+		getUser: async () => {
+			const { token } = getStore();
+			try {
+				const response = await fetch(`${process.env.BACKEND_URL}/api/profile`, {
+					method: "GET",
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${token}`
+					}
+				});
+				if (!response.ok) {
+					throw new Error("No se pudo obtener los datos del perfil");
+				}
+				const data = await response.json();
+				setStore({
+					userData: data,
+					userLoading: false,
+					userError: null
+				});
+			} catch (error) {
+				setStore({
+					userError: error.message,
+					userLoading: false
+				});
+			}
+		},
 	}
 });
 

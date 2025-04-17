@@ -1,58 +1,72 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useContext } from "react";
+import { Context } from "../../../js/store/appContext";
+import { User, Mail, Phone, MapPin, Cake, BadgeCheck, Heart, CalendarDays, UserCheck } from "lucide-react";
+import "../../../styles/dashboard.css";
 
 export const Profile = () => {
-    const [userData, setUserData] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const { store, actions } = useContext(Context);
+    const { userData, userLoading, userError } = store;
 
     useEffect(() => {
-        const fetchUserData = async () => {
-            try {
-                const response = await fetch("http://localhost:3001/api/v1/profile", {
-                    method: "GET",
-                });
-
-                if (!response.ok) {
-                    throw new Error("No se pudo obtener los datos del perfil.");
-                }
-
-                const data = await response.json();
-                setUserData(data);
-            } catch (error) {
-                setError(error.message);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchUserData();
+        actions.getUser();
     }, []);
 
-    if (loading) {
-        return <p>Cargando...</p>;
-    }
-
-    if (error) {
-        return <p>Error: {error}</p>;
-    }
+    if (userLoading) return <p className="dashboard-loading">Cargando perfil...</p>;
+    if (userError) return <p className="text-red-500">Error: {userError}</p>;
 
     return (
-        <div className="p-4 max-w-2xl mx-auto">
-            <h1 className="text-xl font-bold mb-4">Perfil del Usuario</h1>
+        <div className="dashboard-section-profile">
+            <h2 className="dashboard-heading">Perfil del Usuario</h2>
             {userData ? (
                 <div>
-                    <p><strong>Nombre Completo:</strong> {userData.full_name}</p>
-                    <p><strong>Email:</strong> {userData.email}</p>
-                    <p><strong>Género:</strong> {userData.gender}</p>
-                    <p><strong>Edad:</strong> {userData.age}</p>
-                    <p><strong>Dirección:</strong> {userData.address}</p>
-                    <p><strong>Teléfono:</strong> {userData.phone}</p>
-                    <p><strong>Especialidad:</strong> {userData.speciality || "No especificada"}</p>
-                    <p><strong>Estado:</strong> {userData.is_active ? "Activo" : "Inactivo"}</p>
-                    <p><strong>Fecha de Creación:</strong> {new Date(userData.create_at).toLocaleDateString()}</p>
+                    <div className="profile-item">
+                        <User size={20} />
+                        <span className="profile-label">Nombre Completo:</span>
+                        <span>{userData.full_name}</span>
+                    </div>
+                    <div className="profile-item">
+                        <Mail size={20} />
+                        <span className="profile-label">Email:</span>
+                        <span>{userData.email}</span>
+                    </div>
+                    <div className="profile-item">
+                        <Heart size={20} />
+                        <span className="profile-label">Género:</span>
+                        <span>{userData.gender}</span>
+                    </div>
+                    <div className="profile-item">
+                        <Cake size={20} />
+                        <span className="profile-label">Edad:</span>
+                        <span>{userData.age}</span>
+                    </div>
+                    <div className="profile-item">
+                        <MapPin size={20} />
+                        <span className="profile-label">Dirección:</span>
+                        <span>{userData.address}</span>
+                    </div>
+                    <div className="profile-item">
+                        <Phone size={20} />
+                        <span className="profile-label">Teléfono:</span>
+                        <span>{userData.phone}</span>
+                    </div>
+                    <div className="profile-item">
+                        <BadgeCheck size={20} />
+                        <span className="profile-label">Especialidad:</span>
+                        <span>{userData.speciality || "No especificada"}</span>
+                    </div>
+                    <div className="profile-item">
+                        <UserCheck size={20} />
+                        <span className="profile-label">Estado:</span>
+                        <span>{userData.is_active ? "Activo" : "Inactivo"}</span>
+                    </div>
+                    <div className="profile-item">
+                        <CalendarDays size={20} />
+                        <span className="profile-label">Fecha de Creación:</span>
+                        <span>{new Date(userData.create_at).toLocaleDateString()}</span>
+                    </div>
                 </div>
             ) : (
-                <p>No se encontraron datos del usuario.</p>
+                <p className="dashboard-loading">No se encontraron datos del usuario.</p>
             )}
         </div>
     );

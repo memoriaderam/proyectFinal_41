@@ -5,18 +5,17 @@ import os
 from flask import Flask, request, jsonify, url_for, send_from_directory
 from flask_migrate import Migrate
 from flask_swagger import swagger
-from api.seed_data import create_default_roles, create_default_user
+from api.seed_data import seed_database
 from flask_jwt_extended import JWTManager
 from flask import Blueprint
 from flask_cors import CORS
 from api.utils import APIException, generate_sitemap
-from api.models import db
+from api.models import db, Prescription, Order, User, Post
 from api.routes import  api
 from api.admin import setup_admin
 from api.commands import setup_commands
-from api.models import Post
 from api.config import Config
-from flask_cors import CORS
+
 
 # from models import Person
 
@@ -33,12 +32,9 @@ app.config.from_object(Config)
 MIGRATE = Migrate(app, db, compare_type=True)
 db.init_app(app)
 
-
 # Seed roles
 with app.app_context():
-   create_default_roles()
-   create_default_user()
-
+    seed_database()
 
 # add the admin
 setup_admin(app)
@@ -48,15 +44,11 @@ setup_commands(app)
 
 # Add all endpoints form the API with a "api" prefix
 
-
-
-
 # Handle/serialize errors like a JSON object
 
 @app.errorhandler(APIException)
 def handle_invalid_usage(error):
     return jsonify(error.to_dict()), error.status_code
-
 
 # generate sitemap with all your endpoints
 
@@ -65,7 +57,6 @@ def sitemap():
     if ENV == "development":
         return generate_sitemap(app)
     return send_from_directory(static_file_dir, "index.html")
-
 
 # any other endpoint will try to serve it like a static file
 @app.route("/<path:path>", methods=["GET"])
@@ -80,5 +71,3 @@ def serve_any_other_file(path):
 if __name__ == '__main__':
     PORT = int(os.environ.get('PORT', 3001))
     app.run(host='0.0.0.0', port=PORT, debug=True)
-
-

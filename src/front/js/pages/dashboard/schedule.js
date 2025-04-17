@@ -1,47 +1,28 @@
 import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 
 export const Schedule = () => {
-    const navigate = useNavigate();
-
     useEffect(() => {
-        const handleCalendlyEvent = (event) => {
-            if (
-                event.origin === "https://calendly.com" &&
-                event.data?.event === "calendly.event_scheduled"
-            ) {
-                console.log("¡Cita agendada!");
-
-                // Redirigir después de 4 segundos
-                setTimeout(() => {
-                    navigate("/dashboard/appointment");
-                }, 4000);
-            }
-        };
-
-        window.addEventListener("message", handleCalendlyEvent);
-
-        const existingScript = document.querySelector(
-            "script[src='https://assets.calendly.com/assets/external/widget.js']"
-        );
-        if (!existingScript) {
-            const script = document.createElement("script");
-            script.src = "https://assets.calendly.com/assets/external/widget.js";
-            script.async = true;
-            document.body.appendChild(script);
-        }
+        const script = document.createElement("script");
+        script.src = "https://assets.calendly.com/assets/external/widget.js";
+        script.async = true;
+        document.body.appendChild(script);
 
         return () => {
-            window.removeEventListener("message", handleCalendlyEvent);
+            document.body.removeChild(script);
         };
-    }, [navigate]);
+    }, []);
 
     return (
-        <div>
-            <h2 className="text-xl font-bold mb-4">Agendar una Cita</h2>
+        <div className="dashboard-section">
+            <h2 className="dashboard-heading">Agendar una Cita</h2>
+            <p className="dashboard-description">
+                Utiliza el siguiente calendario para seleccionar la fecha y hora que más te convenga.
+                Nuestro equipo estará encantado de atenderte y resolver todas tus dudas.
+            </p>
+
             <div
                 className="calendly-inline-widget"
-                data-url="https://calendly.com/inazariom-vlacademy"
+                data-url="https://calendly.com/inazariom-vlacademy?hide_landing_page_details=1&hide_gdpr_banner=1&background_color=00796b&text_color=ffffff&primary_color=ffffff"
                 style={{ minWidth: "320px", height: "700px" }}
             ></div>
         </div>

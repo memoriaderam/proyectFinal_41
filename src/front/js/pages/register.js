@@ -42,7 +42,7 @@ export const Register = ({ create }) => {
     };
 
     return (
-        <div className="container mt-4">
+        <div className="container">
             <div className="title text-center">
                 <h1>Crear una nueva Cuenta</h1>
             </div>

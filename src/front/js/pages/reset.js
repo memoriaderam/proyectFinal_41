@@ -8,12 +8,12 @@ export const Reset = () => {
     const formRef = useRef();
 
     return (
-        <div className="container mt-4">
+        <div className="container">
             <div className="title text-center">
                 <h1>¿Olvidó su contraseña?</h1>
             </div>
             <div className="form">
-                <form onSubmit={(e) => actions.handleSubmitReset(e, email)} ref={formRef}>
+                <form onSubmit={(e) => actions.submitReset(e, email)} ref={formRef}>
                     <label>Usuario o Correo Electrónico:</label>
                     <input type="text" className="form-input" placeholder="Usuario o Correo Electrónico" value={email} onChange={(e) => setEmail(e.target.value)} required />
                 </form>

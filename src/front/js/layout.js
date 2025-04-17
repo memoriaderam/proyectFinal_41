@@ -107,20 +107,20 @@ const Layout = () => {
                         <Route path="/create/post" element={<Post />} />
                         <Route path="/edit_post/:id" element={<EditPost />} />
 
-                        <Route element={<Demo />} path="/demo" />
-                        <Route element={<Single />} path="/single/:theid" />
-                        <Route element={<Login />} path="/login" />
-                        <Route element={<Register />} path="/register" />
-                        <Route element={<Reset />} path="/reset" />
-                        <Route element={<New_Password />} path="/new_password" />
-                        <Route element={<h1>Not found!</h1>} />
+                        <Route path="/demo" element={<Demo />} />
+                        <Route path="/single/:theid" element={<Single />} />
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/register" element={<Register />} />
+                        <Route path="/reset" element={<Reset />} />
+                        <Route path="/new_password" element={<New_Password />} />
+                        <Route path="*" element={<h1>Not found!</h1>} />
+
                         <Route path="/dashboard" element={<Dashboard />}>
-                            <Route index element={<Profile />} /> {/* Muestra Perfil al entrar a /dashboard */}
+                            <Route index element={<Profile />} />
                             <Route path="profile" element={<Profile />} />
                             <Route path="orders" element={<Orders />} />
                             <Route path="appointments" element={<Appointments />} />
                             <Route path="schedule" element={<Schedule />} />
-
                         </Route>
                     </Routes>
                     <Footer />

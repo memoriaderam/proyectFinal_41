@@ -4,7 +4,7 @@ body {
 
 /*Primer bloque*/
 .title {
-  padding-top: 80px;
+  padding-top: 10px;
   font-size: 25px;
   font-weight: bold;
   color: #1d4c3b;
@@ -150,6 +150,23 @@ label {
   cursor: pointer;
 }
 
+.send-button2 {
+  width: 100%;
+  font-size: 20px;
+  padding: 10px;
+  background-color: #00796b;
+  color: white;
+  border-radius: 40px;
+  cursor: pointer;
+  margin-top: 1px;
+}
+
+.send-button2:hover {
+  background-color: #e5e7eb;
+  color: black;
+  cursor: pointer;
+}
+
 .link {
   color: #00796b;
   cursor: pointer;
@@ -163,6 +180,10 @@ h2 {
 
 .paragraph {
   margin-top: 25px;
+}
+
+.container {
+  margin-bottom: 50px;
 }
 
 .boton-cancelado {

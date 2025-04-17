@@ -17,7 +17,7 @@ from api.comment_routes import register_comment_routes
 from api.doctor_routes import register_doctor_routes
 from api.notification_routes import register_notification_routes
 from api.stats_routes import register_stats_routes
-from api.reset_routes import register_reset_routes
+from api.dashboard_functions import register_dashboard_funtions
 from api.calendly_routes import register_calendly_routes
 
 # ---------- Inicialización ----------
@@ -33,7 +33,7 @@ register_comment_routes(api)
 register_doctor_routes(api)
 register_notification_routes(api)
 register_stats_routes(api)
-register_reset_routes(api)
+register_dashboard_funtions(api)
 register_calendly_routes(api)
 
 # ---------- Ruta de prueba ----------
